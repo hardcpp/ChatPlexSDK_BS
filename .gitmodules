@@ -1,4 +1,0 @@
-[submodule "CP_SDK"]
-	path = CP_SDK
-	url = https://github.com/hardcpp/ChatPlexSDK.git
-	update = merge
