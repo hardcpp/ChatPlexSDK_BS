@@ -296,13 +296,13 @@ namespace CP_SDK_BS.UI
             (m_SongBombsText.transform.parent.transform as UnityEngine.RectTransform).sizeDelta = l_SizeDelta;
 
             /// Patch
-            var l_OffsetTexture = CP_SDK.Unity.Texture2DU.CreateFromRaw(CP_SDK.Misc.Resources.FromPath(Assembly.GetExecutingAssembly(), "CP_SDK_BS.UI.Resources.Offset.png"));
+            var l_OffsetTexture = CP_SDK.Unity.Texture2DU.CreateFromRaw(CP_SDK.Misc.Resources.FromRelPath(Assembly.GetExecutingAssembly(), "CP_SDK_BS.UI.Resources.Offset.png"));
             var l_OffsetSprite = CP_SDK.Unity.SpriteU.CreateFromTexture(l_OffsetTexture, 100f, Vector2.one * 16f);
             m_SongOffsetText = GameObject.Instantiate(m_SongNPSText.transform.parent.gameObject, m_SongNPSText.transform.parent.parent).GetComponentInChildren<TextMeshProUGUI>();
             m_SongOffsetText.transform.parent.SetAsFirstSibling();
             m_SongOffsetText.transform.parent.GetComponentInChildren<HMUI.ImageView>().sprite = l_OffsetSprite;
 
-            var l_NJSTexture = CP_SDK.Unity.Texture2DU.CreateFromRaw(CP_SDK.Misc.Resources.FromPath(Assembly.GetExecutingAssembly(), "CP_SDK_BS.UI.Resources.NJS.png"));
+            var l_NJSTexture = CP_SDK.Unity.Texture2DU.CreateFromRaw(CP_SDK.Misc.Resources.FromRelPath(Assembly.GetExecutingAssembly(), "CP_SDK_BS.UI.Resources.NJS.png"));
             var l_NJSSprite = CP_SDK.Unity.SpriteU.CreateFromTexture(l_NJSTexture, 100f, Vector2.one * 16f);
             m_SongNJSText = GameObject.Instantiate(m_SongNPSText.transform.parent.gameObject, m_SongNPSText.transform.parent.parent).GetComponentInChildren<TextMeshProUGUI>();
             m_SongNJSText.transform.parent.SetAsFirstSibling();
