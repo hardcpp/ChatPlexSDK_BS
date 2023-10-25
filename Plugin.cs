@@ -18,8 +18,8 @@ namespace ChatPlexSDK_BS
     [Plugin(RuntimeOptions.DynamicInit)]
     public class Plugin
     {
-        internal static Hive.Versioning.Version Version     => IPA.Loader.PluginManager.GetPluginFromId("ChatPlexSDK-BS").HVersion;
-        internal static string                  HarmonyID   => "com.github.hardcpp.chatplexsdk-bs";
+        internal static Hive.Versioning.Version Version     => IPA.Loader.PluginManager.GetPluginFromId("ChatPlexSDK_BS").HVersion;
+        internal static string                  HarmonyID   => "com.github.hardcpp.chatplexsdk_bs";
 
         ////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////
@@ -76,7 +76,7 @@ namespace ChatPlexSDK_BS
         ////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
-        /// On ChatPlexSDK-BS enable
+        /// On ChatPlexSDK_BS enable
         /// </summary>
         [OnEnable]
         public void OnEnable()
@@ -93,8 +93,8 @@ namespace ChatPlexSDK_BS
 
 
                 CP_SDK.ChatPlexSDK.Logger.Debug("Init helpers.");
-                SDK.Game.BeatMapsClient.Init();
-                SDK.Game.Logic.Init();
+                CP_SDK_BS.Game.BeatMapsClient.Init();
+                CP_SDK_BS.Game.Logic.Init();
 
                 CP_SDK.ChatPlexSDK.InitModules();
 
@@ -109,12 +109,12 @@ namespace ChatPlexSDK_BS
             }
             catch (Exception p_Exception)
             {
-                CP_SDK.ChatPlexSDK.Logger.Error("[ChatPlexSDK-BS][Plugin.OnEnable] Error:");
+                CP_SDK.ChatPlexSDK.Logger.Error("[ChatPlexSDK_BS][Plugin.OnEnable] Error:");
                 CP_SDK.ChatPlexSDK.Logger.Error(p_Exception);
             }
         }
         /// <summary>
-        /// On ChatPlexSDK-BS disable
+        /// On ChatPlexSDK_BS disable
         /// </summary>
         [OnDisable]
         public void OnDisable()
@@ -156,10 +156,10 @@ namespace ChatPlexSDK_BS
                     var l_Message = $"! @{p_Message.Sender.DisplayName} You can find the streamer's ";
 
                     if (IPA.Loader.PluginManager.GetPluginFromId("ScoreSaber") != null)
-                        l_Message += $" ScoreSaber Profile at https://scoresaber.com/u/{SDK.Game.UserPlatform.GetUserID() ?? "unk"} ";
+                        l_Message += $" ScoreSaber Profile at https://scoresaber.com/u/{CP_SDK_BS.Game.UserPlatform.GetUserID() ?? "unk"} ";
 
                     if (IPA.Loader.PluginManager.GetPluginFromId("BeatLeader") != null)
-                        l_Message += $" BeatLeader Profile at https://www.beatleader.xyz/u/{SDK.Game.UserPlatform.GetUserID() ?? "unk"} ";
+                        l_Message += $" BeatLeader Profile at https://www.beatleader.xyz/u/{CP_SDK_BS.Game.UserPlatform.GetUserID() ?? "unk"} ";
 
                     p_Service.SendTextMessage(p_Message.Channel, l_Message);
                 }
@@ -189,7 +189,7 @@ namespace ChatPlexSDK_BS
         /// </summary>
         private void PatchUI()
         {
-            CP_SDK.UI.UISystem.FloatingPanelFactory = new SDK.UI.DefaultFactoriesOverrides.BS_FloatingPanelFactory();
+            CP_SDK.UI.UISystem.FloatingPanelFactory = new CP_SDK_BS.UI.DefaultFactoriesOverrides.BS_FloatingPanelFactory();
 
             CP_SDK.UI.UISystem.UILayer = LayerMask.NameToLayer("UI");
 

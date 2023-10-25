@@ -1,13 +1,19 @@
 ﻿{
   "$schema": "https://raw.githubusercontent.com/beat-saber-modding-group/BSIPA-MetadataFileSchema/master/Schema.json",
-  "id": "ChatPlexSDK-BS",
-  "name": "ChatPlexSDK-BS",
+  "id": "ChatPlexSDK_BS",
+  "name": "ChatPlexSDK_BS",
   "author": "HardCPP",
   "version": "6.2.0",
   "description": "",
   "gameVersion": "1.31.0",
   "dependsOn": {
     "BSIPA": "^4.3.0"
+  },
+  "loadBefore": [
+    "BeatSaberPlusCORE"
+  ],
+  "conflictsWith": {
+    "BeatSaberPlusCORE": "<=6.2.0"
   },
   "loadAfter": [
     "BeatSaberMarkupLanguage"

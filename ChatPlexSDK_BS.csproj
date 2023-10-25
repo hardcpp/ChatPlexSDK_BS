@@ -8,8 +8,8 @@
     <ProjectGuid>{84972BAC-4FAF-4DA8-92ED-E3A735AF0E92}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ChatPlexSDK-BS</RootNamespace>
-    <AssemblyName>ChatPlexSDK-BS</AssemblyName>
+    <RootNamespace>ChatPlexSDK_BS</RootNamespace>
+    <AssemblyName>ChatPlexSDK_BS</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <DebugType>portable</DebugType>

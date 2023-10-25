@@ -1,3 +1,7 @@
 
-ChatPlexSDK-BS.sln
-ChatPlexSDK-BS.csproj.user
+ChatPlexSDK_BS.sln
+ChatPlexSDK_BS.csproj.user
+
+.vs/
+bin/
+obj/
