@@ -1,7 +1,7 @@
-﻿using SongCore;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,7 +33,7 @@ namespace CP_SDK_BS.Game
         /// </summary>
         /// <returns></returns>
         public static Sprite GetDefaultPackCover()
-            => Loader.defaultCoverImage;
+            => SongCore.Loader.defaultCoverImage;
 
         ////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////
@@ -45,8 +45,8 @@ namespace CP_SDK_BS.Game
         /// <param name="p_Callback">On finish callback</param>
         public static void ReloadSongs(bool p_Full, Action p_Callback = null)
         {
-            Loader.SongsLoadedEvent -= ReloadSongs_Callback;
-            Loader.SongsLoadedEvent += ReloadSongs_Callback;
+            SongCore.Loader.SongsLoadedEvent -= ReloadSongs_Callback;
+            SongCore.Loader.SongsLoadedEvent += ReloadSongs_Callback;
 
             if (p_Callback != null)
             {
@@ -54,14 +54,14 @@ namespace CP_SDK_BS.Game
                     m_ReloadSongsCallbacks.Add(p_Callback);
             }
 
-            CP_SDK.Unity.MTMainThreadInvoker.Enqueue(() => Loader.Instance.RefreshSongs(p_Full));
+            CP_SDK.Unity.MTMainThreadInvoker.Enqueue(() => SongCore.Loader.Instance.RefreshSongs(p_Full));
         }
         /// <summary>
         /// Reload songs callback
         /// </summary>
-        private static void ReloadSongs_Callback(Loader _, ConcurrentDictionary<string, CustomPreviewBeatmapLevel> __)
+        private static void ReloadSongs_Callback(SongCore.Loader _, ConcurrentDictionary<string, CustomPreviewBeatmapLevel> __)
         {
-            Loader.SongsLoadedEvent -= ReloadSongs_Callback;
+            SongCore.Loader.SongsLoadedEvent -= ReloadSongs_Callback;
 
             CP_SDK.Unity.MTMainThreadInvoker.Enqueue(() =>
             {
@@ -132,22 +132,23 @@ namespace CP_SDK_BS.Game
         /// <returns>Sanatized BeatmapCharacteristicSO serialized name or input</returns>
         public static string SanitizeBeatmapCharacteristicSOSerializedName(string p_SerializedName)
         {
-            switch (p_SerializedName)
-            {
-                case "Standard": return "Standard";
-
-                case "One Saber":
-                case "OneSaber": return "OneSaber";
-
-                case "No Arrows":
-                case "NoArrows": return "NoArrows";
-                case "360Degree": return "360Degree";
-                case "Lawless": return "Lawless";
-                case "90Degree": return "90Degree";
-
-                case "LightShow":
-                case "Lightshow": return "Lightshow";
-            }
+            if (        p_SerializedName.Equals("Standard",     StringComparison.OrdinalIgnoreCase))
+                return "Standard";
+            else if (   p_SerializedName.Equals("One Saber",    StringComparison.OrdinalIgnoreCase)
+                     || p_SerializedName.Equals("OneSaber",     StringComparison.OrdinalIgnoreCase))
+                return "OneSaber";
+            else if (   p_SerializedName.Equals("No Arrows",    StringComparison.OrdinalIgnoreCase)
+                     || p_SerializedName.Equals("NoArrows",     StringComparison.OrdinalIgnoreCase))
+                return "NoArrows";
+            else if (   p_SerializedName.Equals("360Degree",    StringComparison.OrdinalIgnoreCase))
+                return "360Degree";
+            else if (   p_SerializedName.Equals("Lawless",      StringComparison.OrdinalIgnoreCase))
+                return "Lawless";
+            else if (   p_SerializedName.Equals("90Degree",     StringComparison.OrdinalIgnoreCase))
+                return "90Degree";
+            else if (   p_SerializedName.Equals("LightShow",    StringComparison.OrdinalIgnoreCase)
+                     || p_SerializedName.Equals("Lightshow",    StringComparison.OrdinalIgnoreCase))
+                return "Lightshow";
 
             return p_SerializedName;
         }
@@ -243,7 +244,7 @@ namespace CP_SDK_BS.Game
         /// BeatmapDifficulty serialized name to difficulty name short
         /// </summary>
         /// <param name="p_BeatmapDifficultySerializedName">BeatmapDifficulty serialized name</param>
-        /// <returns></returns>
+        /// <returns>Difficulty name short</returns>
         public static string BeatmapDifficultySerializedNameToDifficultyNameShort(string p_BeatmapDifficultySerializedName)
         {
             if (p_BeatmapDifficultySerializedName.Equals("easy", StringComparison.OrdinalIgnoreCase))
@@ -378,9 +379,9 @@ namespace CP_SDK_BS.Game
             p_PreviewBeatmapLevel = null;
 
             var l_LevelID = SanitizeLevelID(p_LevelID);
-            if (LevelID_IsCustom(l_LevelID) && Loader.CustomLevelsCollection != null && Loader.CustomLevelsCollection.beatmapLevels != null)
+            if (LevelID_IsCustom(l_LevelID) && SongCore.Loader.CustomLevelsCollection != null && SongCore.Loader.CustomLevelsCollection.beatmapLevels != null)
             {
-                var l_Custom = Loader.CustomLevelsCollection.beatmapLevels.Where(x => x.levelID == l_LevelID).FirstOrDefault();
+                var l_Custom = SongCore.Loader.CustomLevelsCollection.beatmapLevels.Where(x => x.levelID == l_LevelID).FirstOrDefault();
                 if (l_Custom != null)
                 {
                     p_PreviewBeatmapLevel = l_Custom;
@@ -417,7 +418,7 @@ namespace CP_SDK_BS.Game
             var l_LevelID = SanitizeLevelID(p_LevelID);
             if (LevelID_IsCustom(l_LevelID))
             {
-                var l_Level = Loader.GetLevelById(l_LevelID);
+                var l_Level = SongCore.Loader.GetLevelById(l_LevelID);
                 if (l_Level == null)
                 {
                     p_LoadCallback(null);
@@ -456,16 +457,16 @@ namespace CP_SDK_BS.Game
         /// <param name="p_BeatmapDifficulty">Desired BeatmapDifficulty</param>
         /// <param name="p_CustomRequirements">OUT custom requirements</param>
         /// <returns>true or false</returns>
-        public static bool TryGetCustomRequirementsFor( IPreviewBeatmapLevel    p_PreviewBeatmapLevel,
+        public static bool TryGetCustomRequirementsFor(IPreviewBeatmapLevel p_PreviewBeatmapLevel,
                                                         BeatmapCharacteristicSO p_BeatmapCharacteristicSO,
-                                                        BeatmapDifficulty       p_BeatmapDifficulty,
-                                                        out List<string>        p_CustomRequirements)
+                                                        BeatmapDifficulty p_BeatmapDifficulty,
+                                                        out List<string> p_CustomRequirements)
         {
             p_CustomRequirements = null;
             if (p_PreviewBeatmapLevel == null || p_BeatmapCharacteristicSO == null)
                 return false;
 
-            if (   !LevelID_IsCustom(p_PreviewBeatmapLevel.levelID)
+            if (!LevelID_IsCustom(p_PreviewBeatmapLevel.levelID)
                 || !TryGetHashFromLevelID(p_PreviewBeatmapLevel.levelID, out var l_LevelHash))
                 return false;
 
@@ -475,7 +476,7 @@ namespace CP_SDK_BS.Game
 
             var l_CustomData = l_ExtraData._difficulties.FirstOrDefault((x) =>
             {
-                return  x._difficulty == p_BeatmapDifficulty
+                return x._difficulty == p_BeatmapDifficulty
                         && (
                                 x._beatmapCharacteristicName == p_BeatmapCharacteristicSO.characteristicNameLocalizationKey
                             ||
@@ -634,7 +635,7 @@ namespace CP_SDK_BS.Game
         ////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
-        /// Get scores from local cache for a song
+        /// Get scores from local cache for a level id
         /// </summary>
         /// <param name="p_LevelID">Level ID</param>
         /// <param name="p_HaveAnyScore">Have any score set</param>
