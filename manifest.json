@@ -13,7 +13,7 @@
     "BeatSaberPlusCORE"
   ],
   "conflictsWith": {
-    "BeatSaberPlusCORE": "<=6.2.0"
+    "BeatSaberPlusCORE": "*"
   },
   "loadAfter": [
     "BeatSaberMarkupLanguage"
