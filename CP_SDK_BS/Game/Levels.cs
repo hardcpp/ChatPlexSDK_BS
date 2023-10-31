@@ -29,6 +29,16 @@ namespace CP_SDK_BS.Game
         ////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
+        /// Get default pack cover
+        /// </summary>
+        /// <returns></returns>
+        public static Sprite GetDefaultPackCover()
+            => Loader.defaultCoverImage;
+
+        ////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
         /// Reload songs
         /// </summary>
         /// <param name="p_Full">Full reload?</param>
