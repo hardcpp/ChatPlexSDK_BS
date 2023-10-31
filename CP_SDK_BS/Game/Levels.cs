@@ -492,6 +492,71 @@ namespace CP_SDK_BS.Game
             return true;
         }
         /// <summary>
+        /// Try to load PreviewBeatmapLevel cover image async
+        /// </summary>
+        /// <param name="p_PreviewBeatmapLevel">Input PreviewBeatmapLevel</param>
+        /// <param name="p_Callback">Callback</param>
+        public static void TryLoadPreviewBeatmapLevelCoverAsync(IPreviewBeatmapLevel p_PreviewBeatmapLevel, Action<bool, Sprite> p_Callback)
+        {
+            if (p_PreviewBeatmapLevel is CustomPreviewBeatmapLevel l_CustomPreviewBeatmapLevel)
+            {
+                var l_Existing = l_CustomPreviewBeatmapLevel._coverImage;
+                if (l_Existing == null)
+                {
+                    var l_CoverImageFilename = l_CustomPreviewBeatmapLevel.standardLevelInfoSaveData.coverImageFilename;
+                    if (!string.IsNullOrEmpty(l_CoverImageFilename))
+                    {
+                        var l_Path = Path.Combine(l_CustomPreviewBeatmapLevel.customLevelPath, l_CoverImageFilename);
+
+                        CP_SDK.Unity.MTThreadInvoker.EnqueueOnThread(() =>
+                        {
+                            try
+                            {
+                                var l_Bytes = File.ReadAllBytes(l_Path);
+                                CP_SDK.Unity.SpriteU.CreateFromRawThreaded(l_Bytes, (x) =>
+                                {
+                                    l_CustomPreviewBeatmapLevel._coverImage = x ?? GetDefaultPackCover();
+                                    CP_SDK.Unity.MTMainThreadInvoker.Enqueue(() => p_Callback?.Invoke(x, x ?? GetDefaultPackCover()));
+                                });
+                            }
+                            catch (Exception)
+                            {
+                                l_CustomPreviewBeatmapLevel._coverImage = GetDefaultPackCover();
+                                CP_SDK.Unity.MTMainThreadInvoker.Enqueue(() => p_Callback?.Invoke(false, GetDefaultPackCover()));
+                            }
+                        });
+                    }
+                    else
+                    {
+                        l_CustomPreviewBeatmapLevel._coverImage = GetDefaultPackCover();
+                        CP_SDK.Unity.MTMainThreadInvoker.Enqueue(() => p_Callback?.Invoke(false, GetDefaultPackCover()));
+                    }
+                }
+                else
+                    CP_SDK.Unity.MTMainThreadInvoker.Enqueue(() => p_Callback?.Invoke(l_CustomPreviewBeatmapLevel._coverImage, l_CustomPreviewBeatmapLevel._coverImage));
+            }
+            else
+            {
+                var l_CoverTask = null as Task<Sprite>;
+                try
+                {
+                    l_CoverTask = p_PreviewBeatmapLevel.GetCoverImageAsync(CancellationToken.None);
+                    l_CoverTask.ContinueWith((x) =>
+                    {
+                        if (x != null && x.IsCompleted && x.Result)
+                            CP_SDK.Unity.MTMainThreadInvoker.Enqueue(() => p_Callback?.Invoke(x.Result, x.Result));
+                        else
+                            CP_SDK.Unity.MTMainThreadInvoker.Enqueue(() => p_Callback?.Invoke(false, GetDefaultPackCover()));
+                    });
+                }
+                catch (Exception)
+                {
+                    CP_SDK.Unity.MTMainThreadInvoker.Enqueue(() => p_Callback?.Invoke(false, GetDefaultPackCover()));
+                    return;
+                }
+            }
+        }
+        /// <summary>
         /// Start a BeatmapLevel
         /// </summary>
         /// <param name="p_Level">Loaded level</param>
