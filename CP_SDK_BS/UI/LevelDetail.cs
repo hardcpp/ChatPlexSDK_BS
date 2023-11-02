@@ -447,7 +447,7 @@ namespace CP_SDK_BS.UI
 
             Name            = p_BeatMap.songName;
             AuthorNameText  = "Mapped by <b><u>" + p_BeatMap.levelAuthorName + "</b></u>";
-            Cover           = p_Cover ?? SongCore.Loader.defaultCoverImage;
+            Cover           = p_Cover ?? Game.Levels.GetDefaultPackCover();
             Time            = p_BeatMap.songDuration;
             BPM             = p_BeatMap.standardLevelInfoSaveData.beatsPerMinute;
             NPS             = ((float)l_SelectedDifficulty.cuttableNotesCount / (float)p_BeatMap.songDuration);
@@ -488,7 +488,7 @@ namespace CP_SDK_BS.UI
 
             Name            = p_BeatMap.songName;
             AuthorNameText  = "Mapped by <b><u>" + p_BeatMap.levelAuthorName + "</b></u>";
-            Cover           = p_Cover ?? SongCore.Loader.defaultCoverImage;
+            Cover           = p_Cover ?? Game.Levels.GetDefaultPackCover();
             Time            = p_BeatMap.songDuration;
             BPM             = p_BeatMap.beatsPerMinute;
             NJS             = (int)l_IDifficultyBeatmap.noteJumpMovementSpeed;
@@ -574,7 +574,7 @@ namespace CP_SDK_BS.UI
             /// Display informations
             Name            = p_BeatMap.songName;
             AuthorNameText  = "Mapped by <b><u>" + p_BeatMap.levelAuthorName + "</b></u>";
-            Cover           = p_Cover ?? SongCore.Loader.defaultCoverImage;
+            Cover           = p_Cover ?? Game.Levels.GetDefaultPackCover();
             BPM             = p_BeatMap.standardLevelInfoSaveData.beatsPerMinute;
 
             return true;
@@ -642,7 +642,7 @@ namespace CP_SDK_BS.UI
             /// Display informations
             Name            = p_BeatMap.metadata.songName;
             AuthorNameText  = "Mapped by <b><u>" + p_BeatMap.metadata.levelAuthorName + "</b></u>";
-            Cover           = p_Cover ?? SongCore.Loader.defaultCoverImage;
+            Cover           = p_Cover ?? Game.Levels.GetDefaultPackCover();
             Time            = (double)p_BeatMap.metadata.duration;
             BPM             = p_BeatMap.metadata.bpm;
             NPS             = l_SelectedDifficulty.nps;
@@ -702,7 +702,7 @@ namespace CP_SDK_BS.UI
             /// Display informations
             Name            = p_BeatMap.metadata.songName;
             AuthorNameText  = "Mapped by <b><u>" + p_BeatMap.metadata.levelAuthorName + "</b></u>";
-            Cover           = p_Cover ?? SongCore.Loader.defaultCoverImage;
+            Cover           = p_Cover ?? Game.Levels.GetDefaultPackCover();
             BPM             = p_BeatMap.metadata.bpm;
 
             return true;
