@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CP_SDK_BS.Game
 {
@@ -65,7 +64,7 @@ namespace CP_SDK_BS.Game
                     if (l_PlatformUserModel == null)
                         continue;
 
-                    var l_Task = l_PlatformUserModel.GetUserInfo(CancellationToken.None);
+                    var l_Task = l_PlatformUserModel.GetUserInfo();
                     l_Task.Wait();
 
                     var l_PlayerID = l_Task.Result.platformUserId;
