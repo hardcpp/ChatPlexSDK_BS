@@ -147,7 +147,10 @@ namespace CP_SDK_BS.Game
                 p_LevelSearchViewController.didStartLoadingEvent -= LevelSearchViewController_didStartLoadingEvent;
                 p_LevelSearchViewController.ResetCurrentFilterParams();
 
-                p_LevelSearchViewController.UpdateSearchLevelFilterParams(LevelFilterParams.ByBeatmapLevelIds(new HashSet<string>() { m_PendingFilterSong.levelID }));
+                p_LevelSearchViewController.UpdateSearchLevelFilterParams(new LevelFilter()
+                {
+                    limitIds = new string[] { m_PendingFilterSong.levelID }
+                });
                 p_LevelSearchViewController.didStartLoadingEvent += LevelSearchViewController_didStartLoadingEvent;
             }
             catch (System.Exception p_Exception)
@@ -171,8 +174,8 @@ namespace CP_SDK_BS.Game
 
             try
             {
-                var l_Filter = p_LevelSearchViewController._currentFilterParams;
-                if (l_Filter != null && l_Filter.filterByLevelIds)
+                var l_Filter = p_LevelSearchViewController._currentSearchFilter;
+                if (l_Filter.limitIds != null && l_Filter.limitIds.Length == 1)
                 {
                     p_LevelSearchViewController.ResetCurrentFilterParams();
 

@@ -16,7 +16,7 @@ namespace CP_SDK_BS.Game
     {
         private static List<Action>                         m_ReloadSongsCallbacks = new List<Action>(10);
 
-        private static AdditionalContentModel               m_AdditionalContentModel;
+        private static IAdditionalContentModel              m_AdditionalContentModel;
 #if BEATSABER_1_31_0_OR_NEWER
         private static BeatmapCharacteristicCollection      m_BeatmapCharacteristicCollection;
 #endif
@@ -351,17 +351,17 @@ namespace CP_SDK_BS.Game
             if (LevelID_IsCustom(p_LevelID))
                 return true;
 
-            if (!m_AdditionalContentModel)
-                m_AdditionalContentModel = Resources.FindObjectsOfTypeAll<AdditionalContentModel>().FirstOrDefault();
+            if (m_AdditionalContentModel == null)
+                m_AdditionalContentModel = Resources.FindObjectsOfTypeAll<StandardLevelDetailViewController>().FirstOrDefault()?._additionalContentModel;
 
-            if (m_AdditionalContentModel)
+            if (m_AdditionalContentModel != null)
             {
                 m_GetLevelEntitlementStatusTokenSource?.Cancel();
                 m_GetLevelEntitlementStatusTokenSource = new CancellationTokenSource();
 
                 var l_Token = m_GetLevelEntitlementStatusTokenSource.Token;
 
-                return await m_AdditionalContentModel.GetLevelEntitlementStatusAsync(p_LevelID, l_Token) == AdditionalContentModel.EntitlementStatus.Owned;
+                return await m_AdditionalContentModel.GetLevelEntitlementStatusAsync(p_LevelID, l_Token) == EntitlementStatus.Owned;
             }
             else
                 CP_SDK.ChatPlexSDK.Logger.Error("[CP_SDK_BS.Game][Level.OwnDLCLevelByLevelID] Invalid AdditionalContentModel");
