@@ -203,7 +203,10 @@ namespace ChatPlexSDK_BS
                     m_UINoGlowMaterial = Resources.FindObjectsOfTypeAll<Material>().Where(x => x.name == "UINoGlow").FirstOrDefault();
 
                     if (m_UINoGlowMaterial != null)
+                    {
                         m_UINoGlowMaterial = Material.Instantiate(m_UINoGlowMaterial);
+                        m_UINoGlowMaterial.name += " (CP_SDK Clone)";
+                    }
                 }
 
                 return m_UINoGlowMaterial;
@@ -245,6 +248,22 @@ namespace ChatPlexSDK_BS
             };
             CP_SDK.UI.ScreenSystem.OnPresent += ScreenSystem_OnPresent;
             CP_SDK.UI.ScreenSystem.OnDismiss += ScreenSystem_OnDismiss;
+
+            ////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////
+
+            /// Fix Shader on menu reload
+            CP_SDK_BS.Game.Logic.OnMenuSceneLoaded += () =>
+            {
+                if (!m_UINoGlowMaterial)
+                    return;
+
+                var l_OriginalMaterial = Resources.FindObjectsOfTypeAll<Material>().Where(x => x.name == "UINoGlow").FirstOrDefault();
+                if (!l_OriginalMaterial)
+                    return;
+
+                m_UINoGlowMaterial.shader = l_OriginalMaterial.shader;
+            };
         }
         /// <summary>
         /// Screen system on present
