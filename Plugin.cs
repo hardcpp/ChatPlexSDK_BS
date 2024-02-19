@@ -104,7 +104,7 @@ namespace ChatPlexSDK_BS
                     CP_SDK.UI.FlowCoordinators.MainFlowCoordinator.OverrideTitle("BeatSaberPlus");
 
                     CP_SDK.ChatPlexSDK.Logger.Debug("Adding menu button.");
-                    MenuButtons.instance.RegisterButton(new MenuButton("BeatSaberPlus", "Feel good!", OnModButtonPressed, true));
+                    MenuButtons.instance.RegisterButton(new MenuButton("BeatSaber+", "Feel good!", OnModButtonPressed, true));
                 }
             }
             catch (Exception p_Exception)
