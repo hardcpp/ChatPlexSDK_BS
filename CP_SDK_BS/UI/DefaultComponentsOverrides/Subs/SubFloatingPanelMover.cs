@@ -58,7 +58,7 @@ namespace CP_SDK_BS.UI.DefaultComponentsOverrides.Subs
         {
             var l_IsFPFC        = IsFPFC();
 
-#if BEATSABER_1_29_4_OR_NEWER
+#if BEATSABER_1_35_0_OR_NEWER
             var l_VRController          = m_VRPointer?.lastSelectedVrController;
 #else
             var l_VRController          = m_VRPointer?.vrController;
@@ -110,7 +110,7 @@ namespace CP_SDK_BS.UI.DefaultComponentsOverrides.Subs
             if (!m_GrabbingController)
                 return;
 
-#if BEATSABER_1_29_4_OR_NEWER
+#if BEATSABER_1_35_0_OR_NEWER
             var l_Delta = m_GrabbingController.thumbstick.y * Time.unscaledDeltaTime;
 #else
             var l_Delta = m_GrabbingController.verticalAxisValue * Time.unscaledDeltaTime;

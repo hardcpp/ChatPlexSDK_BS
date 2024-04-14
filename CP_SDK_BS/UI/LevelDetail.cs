@@ -32,7 +32,26 @@ namespace CP_SDK_BS.UI
             m_SongDetailViewTemplate = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<StandardLevelDetailView>().First(x => x.gameObject.name == "LevelDetail").gameObject);
             m_SongDetailViewTemplate.name = "BSP_SongDetailViewTemplate";
 
+#if BEATSABER_1_35_0_OR_NEWER
+            try
+            {
+                var l_Component = m_SongDetailViewTemplate.GetComponent<StandardLevelDetailView>();
+                if (l_Component)
+                {
+                    var l_Loader = new BeatmapLevelLoader(null, new MockBeatmapDataAssetFileModel(), null, null, new BeatmapLevelLoader.InitData(0));
+                    var l_Packs = new List<PackDefinitionSO>();
+                    l_Component.SetField("_beatmapLevelsModel", new BeatmapLevelsModel(null, l_Loader, null, l_Packs));
+                    GameObject.DestroyImmediate(l_Component);
+                }
+            }
+            catch (Exception l_Exception)
+            {
+                CP_SDK.ChatPlexSDK.Logger.Error($"[CP_SDK_BS.UI][LevelDetail.Init] Error:");
+                CP_SDK.ChatPlexSDK.Logger.Error(l_Exception);
+            }
+#else
             GameObject.DestroyImmediate(m_SongDetailViewTemplate.GetComponent<StandardLevelDetailView>());
+#endif
         }
 
         ////////////////////////////////////////////////////////////////////////////
@@ -57,7 +76,11 @@ namespace CP_SDK_BS.UI
         private CSecondaryButton                                m_SecondaryButton                           = null;
         private CPrimaryButton                                  m_PrimaryButton                             = null;
         private GameObject                                      m_FavoriteToggle                            = null;
+#if BEATSABER_1_35_0_OR_NEWER
+        private BeatmapLevel                                    m_LocalBeatMap                              = null;
+#else
         private CustomPreviewBeatmapLevel                       m_LocalBeatMap                              = null;
+#endif
         private Game.BeatMaps.MapDetail                         m_BeatMap                                   = null;
 
         ////////////////////////////////////////////////////////////////////////////
@@ -81,7 +104,11 @@ namespace CP_SDK_BS.UI
         public BeatmapCharacteristicSO  SelectedBeatmapCharacteristicSO = null;
         public BeatmapDifficulty        SelectedBeatmapDifficulty       = BeatmapDifficulty.Easy;
 
+#if BEATSABER_1_35_0_OR_NEWER
+        public event Action<BeatmapKey> OnActiveDifficultyChanged;
+#else
         public event Action<IDifficultyBeatmap> OnActiveDifficultyChanged;
+#endif
 
         public Action OnSecondaryButton;
         public Action OnPrimaryButton;
@@ -357,140 +384,59 @@ namespace CP_SDK_BS.UI
         ////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
-        /// Set from SongCore
-        /// </summary>
-        /// <param name="p_BeatMap">BeatMap</param>
-        /// <param name="p_Cover">Cover texture</param>
-        /// <param name="p_Characteristic">Game mode</param>
-        /// <param name="p_DifficultyRaw">Difficulty raw</param>
-        /// <param name="p_CharacteristicSO">Out SO characteristic</param>
-        /// <returns></returns>
-        public bool FromSongCore(CustomPreviewBeatmapLevel p_BeatMap, Sprite p_Cover, string p_Characteristic, string p_DifficultyRaw, out BeatmapCharacteristicSO p_CharacteristicSO)
-        {
-            p_CharacteristicSO = null;
-            m_LocalBeatMap = null;
-            m_BeatMap = null;
-
-            if (p_BeatMap == null)
-            {
-                CP_SDK.ChatPlexSDK.Logger.Error($"[CP_SDK_BS.UI][LevelDetail.FromSongCore] Null Beatmap provided!");
-                return false;
-            }
-
-            /// Select characteristic
-            PreviewDifficultyBeatmapSet l_PreviewBeatmap = null;
-            foreach (var l_Current in p_BeatMap.previewDifficultyBeatmapSets)
-            {
-                if (l_Current.beatmapCharacteristic.serializedName.ToLower() != p_Characteristic.ToLower())
-                    continue;
-
-                l_PreviewBeatmap   = l_Current;
-                p_CharacteristicSO = l_Current.beatmapCharacteristic;
-                break;
-            }
-
-            if (l_PreviewBeatmap == null)
-            {
-                CP_SDK.ChatPlexSDK.Logger.Error($"[CP_SDK_BS.UI][LevelDetail.FromSongCore] No preview beatmap found!");
-                return false;
-            }
-
-            /// Display mode
-            Characteristic = new HMUI.IconSegmentedControl.DataItem(l_PreviewBeatmap.beatmapCharacteristic.icon, Polyglot.Localization.Get(l_PreviewBeatmap.beatmapCharacteristic.descriptionLocalizationKey));
-
-            /// Select difficulty
-            BeatmapDataBasicInfo l_SelectedDifficulty = null;
-            var l_Difficulties      = p_BeatMap.standardLevelInfoSaveData.difficultyBeatmapSets.Where(x => x.beatmapCharacteristicName.ToLower() == p_Characteristic.ToLower()).SingleOrDefault();
-            var l_DifficultyBeatMap = null as StandardLevelInfoSaveData.DifficultyBeatmap;
-
-            if (l_Difficulties != null)
-            {
-                foreach (var l_Current in l_Difficulties.difficultyBeatmaps)
-                {
-                    if (l_Current.difficulty.ToLower() != p_DifficultyRaw.ToLower())
-                        continue;
-
-                    l_DifficultyBeatMap = l_Current;
-
-                    string              l_DifficultyPath = p_BeatMap.customLevelPath + "\\" + l_Current.beatmapFilename;
-                    BeatmapDataLoader   l_Loader         = new BeatmapDataLoader();
-
-                    try
-                    {
-                        var l_StandartLevelInformation = p_BeatMap.standardLevelInfoSaveData;
-                        var l_JSON = System.IO.File.ReadAllText(l_DifficultyPath);
-
-                        var l_BeatmapSaveData   = BeatmapSaveDataVersion3.BeatmapSaveData.DeserializeFromJSONString(l_JSON);
-                        var l_Info              = BeatmapDataLoader.GetBeatmapDataBasicInfoFromSaveData(l_BeatmapSaveData);
-                        if (l_Info != null)
-                        {
-                            l_SelectedDifficulty = l_Info;
-                            break;
-                        }
-                    }
-                    catch (Exception p_Exception)
-                    {
-                        CP_SDK.ChatPlexSDK.Logger.Error($"[CP_SDK_BS.UI][LevelDetail.FromSongCore] Error:");
-                        CP_SDK.ChatPlexSDK.Logger.Error(p_Exception);
-                    }
-                }
-            }
-
-            if (l_SelectedDifficulty == null)
-            {
-                CP_SDK.ChatPlexSDK.Logger.Error($"[CP_SDK_BS.UI][LevelDetail.FromSongCore] No valid difficulty found!");
-                return false;
-            }
-
-            /// Display difficulty
-            Difficulty = Game.Levels.BeatmapDifficultySerializedNameToDifficultyName(p_DifficultyRaw);
-
-            Name            = p_BeatMap.songName;
-            AuthorNameText  = "Mapped by <b><u>" + p_BeatMap.levelAuthorName + "</b></u>";
-            Cover           = p_Cover ?? Game.Levels.GetDefaultPackCover();
-            Time            = p_BeatMap.songDuration;
-            BPM             = p_BeatMap.standardLevelInfoSaveData.beatsPerMinute;
-            NPS             = ((float)l_SelectedDifficulty.cuttableNotesCount / (float)p_BeatMap.songDuration);
-            NJS             = (int)l_DifficultyBeatMap.noteJumpMovementSpeed;
-            Offset          = l_DifficultyBeatMap.noteJumpStartBeatOffset;
-            Notes           = l_SelectedDifficulty.cuttableNotesCount;
-            Obstacles       = l_SelectedDifficulty.obstaclesCount;
-            Bombs           = l_SelectedDifficulty.bombsCount;
-
-            return true;
-        }
-        /// <summary>
-        /// Set from SongCore
+        /// Set from game
         /// </summary>
         /// <param name="p_BeatMap">BeatMap</param>
         /// <param name="p_Cover">Cover texture</param>
         /// <param name="p_Characteristic">Game mode</param>
         /// <param name="p_Difficulty">Difficulty</param>
         /// <returns></returns>
-        public bool FromSongCore(IBeatmapLevel p_BeatMap, Sprite p_Cover, BeatmapCharacteristicSO p_Characteristic, BeatmapDifficulty p_Difficulty)
+#if BEATSABER_1_35_0_OR_NEWER
+        public bool FromGame(BeatmapLevel p_BeatMap, Sprite p_Cover, BeatmapCharacteristicSO p_Characteristic, BeatmapDifficulty p_Difficulty)
+#else
+        public bool FromGame(IBeatmapLevel p_BeatMap, Sprite p_Cover, BeatmapCharacteristicSO p_Characteristic, BeatmapDifficulty p_Difficulty)
+#endif
         {
             m_LocalBeatMap      = null;
             m_BeatMap           = null;
 
             if (p_BeatMap == null)
             {
-                CP_SDK.ChatPlexSDK.Logger.Error($"[CP_SDK_BS.UI][LevelDetail.FromSongCore] Null Beatmap provided!");
+                CP_SDK.ChatPlexSDK.Logger.Error($"[CP_SDK_BS.UI][LevelDetail.FromGame] Null Beatmap provided!");
                 return false;
             }
 
             /// Display mode
+#if BEATSABER_1_35_0_OR_NEWER
+            Characteristic = new HMUI.IconSegmentedControl.DataItem(p_Characteristic.icon, BGLib.Polyglot.Localization.Get(p_Characteristic.descriptionLocalizationKey));
+
+            var l_DifficultyBeatmap = p_BeatMap.GetDifficultyBeatmapData(p_Characteristic, p_Difficulty);
+#else
             Characteristic = new HMUI.IconSegmentedControl.DataItem(p_Characteristic.icon, Polyglot.Localization.Get(p_Characteristic.descriptionLocalizationKey));
 
             var l_IDifficultyBeatmap = p_BeatMap.beatmapLevelData.GetDifficultyBeatmap(p_Characteristic, p_Difficulty);
+#endif
 
             /// Display difficulty
             Difficulty = Game.Levels.BeatmapDifficultySerializedNameToDifficultyName(p_Difficulty.ToString());
 
             Name            = p_BeatMap.songName;
+#if BEATSABER_1_35_0_OR_NEWER
+            AuthorNameText  = "Mapped by <b><u>" + (p_BeatMap.allMappers.FirstOrDefault() ?? "") + "</b></u>";
+#else
             AuthorNameText  = "Mapped by <b><u>" + p_BeatMap.levelAuthorName + "</b></u>";
+#endif
             Cover           = p_Cover ?? Game.Levels.GetDefaultPackCover();
             Time            = p_BeatMap.songDuration;
             BPM             = p_BeatMap.beatsPerMinute;
+#if BEATSABER_1_35_0_OR_NEWER
+            NJS             = (int)l_DifficultyBeatmap.noteJumpMovementSpeed;
+            Offset          = l_DifficultyBeatmap.noteJumpStartBeatOffset;
+            NPS             = ((float)l_DifficultyBeatmap.notesCount / (float)p_BeatMap.songDuration);
+            Notes           = l_DifficultyBeatmap.notesCount;
+            Obstacles       = l_DifficultyBeatmap.obstaclesCount;
+            Bombs           = l_DifficultyBeatmap.bombsCount;
+#else
             NJS             = (int)l_IDifficultyBeatmap.noteJumpMovementSpeed;
             Offset          = l_IDifficultyBeatmap.noteJumpStartBeatOffset;
 
@@ -533,34 +479,40 @@ namespace CP_SDK_BS.UI
                     Bombs       = -1;
                 }
             }
+#endif
 
             return true;
         }
         /// <summary>
-        /// Set from SongCore
+        /// Set from game
         /// </summary>
         /// <param name="p_BeatMap">BeatMap</param>
         /// <param name="p_Cover">Cover texture</param>
         /// <returns></returns>
-        public bool FromSongCore(CustomPreviewBeatmapLevel p_BeatMap, Sprite p_Cover)
+        public bool FromGame(BeatmapLevel p_BeatMap, Sprite p_Cover)
         {
             m_LocalBeatMap = null;
             m_BeatMap = null;
 
             if (p_BeatMap == null)
             {
-                CP_SDK.ChatPlexSDK.Logger.Error($"[CP_SDK_BS.UI][LevelDetail.FromSongCore] Null Beatmap provided!");
+                CP_SDK.ChatPlexSDK.Logger.Error($"[CP_SDK_BS.UI][LevelDetail.FromGame] Null Beatmap provided!");
                 return false;
             }
 
             /// Display modes
             var l_Characteristics = new List<HMUI.IconSegmentedControl.DataItem>();
+#if BEATSABER_1_35_0_OR_NEWER
+            foreach (var l_Current in p_BeatMap.GetCharacteristics().Distinct())
+                l_Characteristics.Add(new HMUI.IconSegmentedControl.DataItem(l_Current.icon, BGLib.Polyglot.Localization.Get(l_Current.descriptionLocalizationKey)));
+#else
             foreach (var l_Current in p_BeatMap.previewDifficultyBeatmapSets.Select(x => x.beatmapCharacteristic).Distinct())
                 l_Characteristics.Add(new HMUI.IconSegmentedControl.DataItem(l_Current.icon, Polyglot.Localization.Get(l_Current.descriptionLocalizationKey)));
+#endif
 
             if (l_Characteristics.Count == 0)
             {
-                CP_SDK.ChatPlexSDK.Logger.Error($"[CP_SDK_BS.UI][LevelDetail.FromSongCore2] No valid characteristics found for map \"{p_BeatMap.levelID}\"!");
+                CP_SDK.ChatPlexSDK.Logger.Error($"[CP_SDK_BS.UI][LevelDetail.FromGame] No valid characteristics found for map \"{p_BeatMap.levelID}\"!");
                 return false;
             }
 
@@ -573,9 +525,15 @@ namespace CP_SDK_BS.UI
 
             /// Display informations
             Name            = p_BeatMap.songName;
+#if BEATSABER_1_35_0_OR_NEWER
+            AuthorNameText  = "Mapped by <b><u>" + p_BeatMap.allMappers.FirstOrDefault() + "</b></u>";
+            Cover           = p_Cover ?? Game.Levels.GetDefaultPackCover();
+            BPM             = p_BeatMap.beatsPerMinute;
+#else
             AuthorNameText  = "Mapped by <b><u>" + p_BeatMap.levelAuthorName + "</b></u>";
             Cover           = p_Cover ?? Game.Levels.GetDefaultPackCover();
             BPM             = p_BeatMap.standardLevelInfoSaveData.beatsPerMinute;
+#endif
 
             return true;
         }
@@ -618,7 +576,11 @@ namespace CP_SDK_BS.UI
                 return false;
             }
 
+#if BEATSABER_1_35_0_OR_NEWER
+            Characteristic      = new HMUI.IconSegmentedControl.DataItem(l_CharacteristicDetails.icon, BGLib.Polyglot.Localization.Get(l_CharacteristicDetails.descriptionLocalizationKey));
+#else
             Characteristic      = new HMUI.IconSegmentedControl.DataItem(l_CharacteristicDetails.icon, Polyglot.Localization.Get(l_CharacteristicDetails.descriptionLocalizationKey));
+#endif
             p_CharacteristicSO  = l_CharacteristicDetails;
 
             /// Select difficulty
@@ -683,7 +645,13 @@ namespace CP_SDK_BS.UI
             foreach (var l_Current in l_Version.GetBeatmapCharacteristicSOSerializedNamesInOrder())
             {
                 if (Game.Levels.TryGetBeatmapCharacteristicSOBySerializedName(l_Current, out var l_BeatmapCharacteristicSO))
+                {
+#if BEATSABER_1_35_0_OR_NEWER
+                    l_Characteristics.Add(new HMUI.IconSegmentedControl.DataItem(l_BeatmapCharacteristicSO.icon, BGLib.Polyglot.Localization.Get(l_BeatmapCharacteristicSO.descriptionLocalizationKey)));
+#else
                     l_Characteristics.Add(new HMUI.IconSegmentedControl.DataItem(l_BeatmapCharacteristicSO.icon, Polyglot.Localization.Get(l_BeatmapCharacteristicSO.descriptionLocalizationKey)));
+#endif
+                }
             }
 
             if (l_Characteristics.Count == 0)
@@ -842,16 +810,26 @@ namespace CP_SDK_BS.UI
         {
             if (m_LocalBeatMap != null)
             {
+#if BEATSABER_1_35_0_OR_NEWER
+                var l_Characs = m_LocalBeatMap.GetCharacteristics().Distinct();
+#else
                 var l_Characs = m_LocalBeatMap.previewDifficultyBeatmapSets.Select(x => x.beatmapCharacteristic).Distinct();
+#endif
 
                 if (p_Index > l_Characs.Count())
                     return;
 
                 SelectedBeatmapCharacteristicSO = l_Characs.ElementAt(p_Index);
 
+#if BEATSABER_1_35_0_OR_NEWER
+                List<string> l_Difficulties = m_LocalBeatMap.GetBeatmapKeys()
+                    .Where(x => x.beatmapCharacteristic == SelectedBeatmapCharacteristicSO)
+                    .Select(x => Game.Levels.BeatmapDifficultySerializedNameToDifficultyName(x.difficulty.SerializedName())).ToList();
+#else
                 List<string> l_Difficulties = m_LocalBeatMap.previewDifficultyBeatmapSets
                     .Where(x => x.beatmapCharacteristic == SelectedBeatmapCharacteristicSO)
                     .FirstOrDefault().beatmapDifficulties.Select(x => x.SerializedName()).ToList();
+#endif
 
                 m_SongDiffSegmentedControl.SetTexts(l_Difficulties.ToArray());
                 m_SongDiffSegmentedControl.SelectCellWithNumber(l_Difficulties.Count - 1);
@@ -885,15 +863,26 @@ namespace CP_SDK_BS.UI
         {
             if (m_LocalBeatMap != null)
             {
+#if BEATSABER_1_35_0_OR_NEWER
+                var l_Characs = m_LocalBeatMap.GetCharacteristics().Distinct();
+#else
                 var l_Characs = m_LocalBeatMap.previewDifficultyBeatmapSets.Select(x => x.beatmapCharacteristic).Distinct();
+#endif
 
                 if (m_SongCharacteristicSegmentedControl.selectedCellNumber > l_Characs.Count())
                     return;
 
+#if BEATSABER_1_35_0_OR_NEWER
+                var l_Difficulties = m_LocalBeatMap.GetBeatmapKeys()
+                    .Where(x => x.beatmapCharacteristic == SelectedBeatmapCharacteristicSO);
+
+                if (p_Index < 0 || p_Index >= l_Difficulties.Count())
+#else
                 var l_Difficulties = m_LocalBeatMap.standardLevelInfoSaveData.difficultyBeatmapSets
                     .Where(x => x.beatmapCharacteristicName == SelectedBeatmapCharacteristicSO.serializedName)
                     .SingleOrDefault();
                 if (p_Index < 0 || p_Index >= l_Difficulties.difficultyBeatmaps.Length)
+#endif
                 {
                     Time        = -1f;
                     NPS         = -1f;
@@ -905,6 +894,21 @@ namespace CP_SDK_BS.UI
                     return;
                 }
 
+#if BEATSABER_1_35_0_OR_NEWER
+                var l_BeatmapKey        = l_Difficulties.ElementAt(p_Index);
+                var l_DifficultyBeatmap = m_LocalBeatMap.GetDifficultyBeatmapData(l_BeatmapKey.beatmapCharacteristic, l_BeatmapKey.difficulty);
+
+                Time            = m_LocalBeatMap.songDuration;
+                NPS             = ((float)l_DifficultyBeatmap.notesCount / (float)m_LocalBeatMap.songDuration);
+                NJS             = (int)l_DifficultyBeatmap.noteJumpMovementSpeed;
+                Offset          = l_DifficultyBeatmap.noteJumpStartBeatOffset;
+                Notes           = l_DifficultyBeatmap.notesCount;
+                Obstacles       = l_DifficultyBeatmap.obstaclesCount;
+                Bombs           = l_DifficultyBeatmap.bombsCount;
+
+                if (OnActiveDifficultyChanged != null)
+                    OnActiveDifficultyChanged.Invoke(l_BeatmapKey);
+#else
                 var l_DifficultyBeatMap = l_Difficulties.difficultyBeatmaps.ElementAt(p_Index);
                 var l_DifficultyPath    = m_LocalBeatMap.customLevelPath + "\\" + l_DifficultyBeatMap.beatmapFilename;
                 var l_Loader            = new BeatmapDataLoader();
@@ -926,7 +930,7 @@ namespace CP_SDK_BS.UI
                         Bombs           = l_Info.bombsCount;
 
                         if (OnActiveDifficultyChanged != null)
-                            OnActiveDifficultyChanged.Invoke(GetIDifficultyBeatMap());
+                            OnActiveDifficultyChanged.Invoke(null);
                     }
                 }
                 catch (Exception p_Exception)
@@ -943,6 +947,7 @@ namespace CP_SDK_BS.UI
                     Bombs       = -1;
                     return;
                 }
+#endif
             }
             else if (m_BeatMap != null)
             {
@@ -977,8 +982,13 @@ namespace CP_SDK_BS.UI
                 Obstacles   = l_SelectedBeatmapCharacteristicDifficulty.obstacles;
                 Bombs       = l_SelectedBeatmapCharacteristicDifficulty.bombs;
 
+#if BEATSABER_1_35_0_OR_NEWER
+                if (OnActiveDifficultyChanged != null && Game.Levels.TryGetLevelIDFromHash(l_Version.hash, out var l_LevelID))
+                    OnActiveDifficultyChanged.Invoke(new BeatmapKey(l_LevelID, SelectedBeatmapCharacteristicSO, SelectedBeatmapDifficulty));
+#else
                 if (OnActiveDifficultyChanged != null)
-                    OnActiveDifficultyChanged.Invoke(GetIDifficultyBeatMap());
+                    OnActiveDifficultyChanged.Invoke(null);
+#endif
             }
         }
         /// <summary>
@@ -991,40 +1001,5 @@ namespace CP_SDK_BS.UI
         /// </summary>
         private void OnPrimaryButtonClicked()
             => OnPrimaryButton?.Invoke();
-
-        ////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////
-
-        /// <summary>
-        /// Get IDifficultyBeatmap
-        /// </summary>
-        /// <returns></returns>
-        private IDifficultyBeatmap GetIDifficultyBeatMap()
-        {
-            //if (m_BeatMap == null)
-                return null;
-            /*
-            var l_CharacIndex = m_SongCharacteristicSegmentedControl.selectedCellNumber;
-            if (l_CharacIndex >= m_BeatMap.Metadata.Characteristics.Count)
-                return null;
-
-            var l_LocalSong = SongCore.Loader.GetLevelByHash(m_BeatMap.Hash);
-            if (l_LocalSong != null && SongCore.Loader.CustomLevels.ContainsKey(l_LocalSong.customLevelPath))
-            {
-                IBeatmapLevel l_Level = null;
-
-                var task = Task.Run(async () => { await Game.Level.LoadSong(l_LocalSong.levelID, (x) => l_Level = x); });
-                task.Wait();
-
-                return l_Level.beatmapLevelData.GetDifficultyBeatmap(SelectedBeatmapCharacteristicSO, SelecteBeatmapDifficulty);
-            }
-            else
-            {
-                var l_BSBeatmapLevel            = Game.BeatSaver.CreateFakeCustomBeatmapLevelFromBeatMap(m_BeatMap);
-                var l_BSIDifficultyBeatmapSet   = l_BSBeatmapLevel.beatmapLevelData.difficultyBeatmapSets.Where(x => x.beatmapCharacteristic == SelectedBeatmapCharacteristicSO).FirstOrDefault();
-
-                return l_BSIDifficultyBeatmapSet.difficultyBeatmaps.Where(x => x.difficulty == SelecteBeatmapDifficulty).FirstOrDefault();
-            }*/
-        }
     }
 }
