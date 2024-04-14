@@ -163,10 +163,7 @@ namespace CP_SDK_BS.Game
 #else
                 p_LevelSearchViewController.ResetCurrentFilterParams();
 
-                p_LevelSearchViewController.UpdateSearchLevelFilterParams(new LevelFilter()
-                {
-                    limitIds = new string[] { m_PendingFilterSong.levelID }
-                });
+                p_LevelSearchViewController.UpdateSearchLevelFilterParams(LevelFilterParams.ByBeatmapLevelIds(new HashSet<string>() { m_PendingFilterSong.levelID }));
 #endif
 
                 p_LevelSearchViewController.didStartLoadingEvent += LevelSearchViewController_didStartLoadingEvent;
