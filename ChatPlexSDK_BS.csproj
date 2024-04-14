@@ -26,14 +26,14 @@
     <DebugSymbols>true</DebugSymbols>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CP_SDK_IPA;CP_SDK_UNITY;BEATSABER;UNITY_5_3_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2019_1_OR_NEWER UNITY_STANDALONE_WIN;UNITY_2018_3_OR_NEWER;NETSTANDARD;BEATSABER_1_29_4_OR_NEWER;BEATSABER_1_31_0_OR_NEWER</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;CP_SDK_IPA;CP_SDK_UNITY;BEATSABER;UNITY_5_3_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2019_1_OR_NEWER UNITY_STANDALONE_WIN;UNITY_2018_3_OR_NEWER;NETSTANDARD;BEATSABER_1_35_0_OR_NEWER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>CP_SDK_IPA;CP_SDK_UNITY;BEATSABER;UNITY_5_3_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2019_1_OR_NEWER UNITY_STANDALONE_WIN;UNITY_2018_3_OR_NEWER;NETSTANDARD;BEATSABER_1_29_4_OR_NEWER;BEATSABER_1_31_0_OR_NEWER</DefineConstants>
+    <DefineConstants>CP_SDK_IPA;CP_SDK_UNITY;BEATSABER;UNITY_5_3_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2019_1_OR_NEWER UNITY_STANDALONE_WIN;UNITY_2018_3_OR_NEWER;NETSTANDARD;BEATSABER_1_35_0_OR_NEWER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>
@@ -73,64 +73,80 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(BeatSaberDir)\Libs\0Harmony.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="AdditionalContentModel.Interfaces">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\AdditionalContentModel.Interfaces.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="BeatmapCore">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatmapCore.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="BGLib.AppFlow">
+    <Reference Include="BGLib.AppFlow" Publicize="true">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BGLib.AppFlow.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="BGLib.Polyglot">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BGLib.Polyglot.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="BGLib.UnityExtension">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BGLib.UnityExtension.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="BGNet">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BGNet.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="BGNetCore">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BGNetCore.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="BSML">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(BeatSaberDir)\Plugins\BSML.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Colors">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Colors.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="GameplayCore">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Core" Publicize="true">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DataModels" Publicize="true">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\DataModels.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="GameplayCore" Publicize="true">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\GameplayCore.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Hive.Versioning">
       <HintPath>$(BeatSaberDir)\Libs\Hive.Versioning.dll</HintPath>
       <Private>False</Private>
-      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="HMRendering" Publicize="true">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMRendering.dll</HintPath>
       <Private>False</Private>
-      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="MediaLoader">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\MediaLoader.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(BeatSaberDir)\Libs\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
-      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="PlatformUserModel">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\PlatformUserModel.dll</HintPath>
-    </Reference>
-    <Reference Include="Polyglot">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Polyglot.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="SongCore">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(BeatSaberDir)\Plugins\SongCore.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -139,12 +155,10 @@
     <Reference Include="System.Runtime.Serialization">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\System.Runtime.Serialization.dll</HintPath>
       <Private>False</Private>
-      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System.Web">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\System.Web.dll</HintPath>
       <Private>False</Private>
-      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -175,50 +189,44 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
-      <Private>False</Private>
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AudioModule">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.ImageConversionModule">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
       <Private>False</Private>
-      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.ParticleSystemModule">
-      <Private>False</Private>
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.ParticleSystemModule.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
-      <Private>False</Private>
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.TextCoreFontEngineModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.TextCoreFontEngineModule.dll</HintPath>
       <Private>False</Private>
-      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UI.dll</HintPath>
@@ -233,29 +241,28 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UnityWebRequestAudioModule">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UnityWebRequestModule">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.VRModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.VRModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.XRModule">
-      <Private>False</Private>
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.XRModule.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="VRUI" Publicize="true">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\VRUI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Zenject">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Zenject.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -556,6 +563,7 @@
     <Compile Include="CP_SDK\XUI\XUITextInput.cs" />
     <Compile Include="CP_SDK\XUI\XUITextSegmentedControl.cs" />
     <Compile Include="CP_SDK\XUI\XUIVVList.cs" />
+    <Compile Include="CP_SDK_BS\Game\Patches\PMissionLevelScenesTransitionSetupDataSO.cs" />
     <Compile Include="CP_SDK_BS\Game\PlayerAvatarPicture.cs" />
     <Compile Include="CP_SDK_BS\UI\CP_SDK_UI_IViewControllerBridge.cs" />
     <Compile Include="CP_SDK_BS\UI\Data\SongListCell.cs" />
@@ -731,7 +739,7 @@
     <Compile Include="CP_SDK_BS\Game\LevelSelection.cs" />
     <Compile Include="CP_SDK_BS\Game\LevelData.cs" />
     <Compile Include="CP_SDK_BS\Game\LevelType.cs" />
-    <Compile Include="CP_SDK_BS\Game\Patches\PMissionLevelScenesTransitionSetupDataSO.cs" />
+    <Compile Include="CP_SDK_BS\Game\Patches\PMenuTransitionsHelper__StartMissionLevel.cs" />
     <Compile Include="CP_SDK_BS\Game\Patches\PMultiplayerLevelScenesTransitionSetupDataSO.cs" />
     <Compile Include="CP_SDK_BS\Game\Patches\PStandardLevelScenesTransitionSetupDataSO.cs" />
     <Compile Include="CP_SDK\Misc\RingBuffer.cs" />
