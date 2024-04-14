@@ -186,7 +186,11 @@ namespace CP_SDK_BS.Game
                         {
                             case LevelType.Solo:
                                 Patches.PStandardLevelScenesTransitionSetupDataSO.RestoreLevelData(LevelData);
+#if BEATSABER_1_35_0_OR_NEWER
+                                Patches.PMenuTransitionsHelper__StartMissionLevel.RestoreLevelData(LevelData);
+#else
                                 Patches.PMissionLevelScenesTransitionSetupDataSO.RestoreLevelData(LevelData);
+#endif
                                 break;
 
                             case LevelType.Multiplayer:

@@ -13,7 +13,11 @@ namespace CP_SDK_BS.Game
         /// <summary>
         /// Pending filter song
         /// </summary>
+#if BEATSABER_1_35_0_OR_NEWER
+        static private BeatmapLevel m_PendingFilterSong = null;
+#else
         static private CustomPreviewBeatmapLevel m_PendingFilterSong = null;
+#endif
 
         ////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////
@@ -23,7 +27,11 @@ namespace CP_SDK_BS.Game
         /// </summary>
         /// <param name="p_SongToFilter">Song to filter</param>
         /// <returns></returns>
+#if BEATSABER_1_35_0_OR_NEWER
+        public static bool FilterToSpecificSong(BeatmapLevel p_SongToFilter)
+#else
         public static bool FilterToSpecificSong(CustomPreviewBeatmapLevel p_SongToFilter)
+#endif
         {
             m_PendingFilterSong = p_SongToFilter;
 
@@ -145,12 +153,22 @@ namespace CP_SDK_BS.Game
             try
             {
                 p_LevelSearchViewController.didStartLoadingEvent -= LevelSearchViewController_didStartLoadingEvent;
+
+#if BEATSABER_1_35_0_OR_NEWER
+                p_LevelSearchViewController.Refresh(new LevelFilter()
+                {
+                    searchText = "",
+                    limitIds = new string[] { m_PendingFilterSong.levelID }
+                });
+#else
                 p_LevelSearchViewController.ResetCurrentFilterParams();
 
                 p_LevelSearchViewController.UpdateSearchLevelFilterParams(new LevelFilter()
                 {
                     limitIds = new string[] { m_PendingFilterSong.levelID }
                 });
+#endif
+
                 p_LevelSearchViewController.didStartLoadingEvent += LevelSearchViewController_didStartLoadingEvent;
             }
             catch (System.Exception p_Exception)
@@ -177,7 +195,11 @@ namespace CP_SDK_BS.Game
                 var l_Filter = p_LevelSearchViewController._currentSearchFilter;
                 if (l_Filter.limitIds != null && l_Filter.limitIds.Length == 1)
                 {
+#if BEATSABER_1_35_0_OR_NEWER
+                    p_LevelSearchViewController.ResetAllFilterSettings(false);
+#else
                     p_LevelSearchViewController.ResetCurrentFilterParams();
+#endif
 
                     var l_InputFieldView = p_LevelSearchViewController._searchTextInputFieldView;
                     if (l_InputFieldView != null && l_InputFieldView)

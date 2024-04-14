@@ -1,14 +1,14 @@
-﻿using HarmonyLib;
-using IPA.Utilities;
+﻿#if BEATSABER_1_35_0_OR_NEWER
+using HarmonyLib;
 
 namespace CP_SDK_BS.Game.Patches
 {
     /// <summary>
     /// Level data finder
     /// </summary>
-    [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO))]
-    [HarmonyPatch(nameof(StandardLevelScenesTransitionSetupDataSO.InitAndSetupScenes))]
-    public class PStandardLevelScenesTransitionSetupDataSO : StandardLevelScenesTransitionSetupDataSO
+    [HarmonyPatch(typeof(MenuTransitionsHelper))]
+    [HarmonyPatch(nameof(MenuTransitionsHelper.StartMissionLevel))]
+    public class PMenuTransitionsHelper__StartMissionLevel
     {
         /// <summary>
         /// Level data cache
@@ -19,20 +19,22 @@ namespace CP_SDK_BS.Game.Patches
         ////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
-        /// Postfix
+        /// Prefix
         /// </summary>
-        internal static void Postfix(ref StandardLevelScenesTransitionSetupDataSO __instance)
+        internal static void Postfix(ref MenuTransitionsHelper __instance)
         {
-            m_LevelData = new LevelData()
+            var l_LevelData = new LevelData()
             {
                 Type = LevelType.Solo,
-                Data = __instance.gameplayCoreSceneSetupData
+                Data = __instance._missionLevelScenesTransitionSetupData.gameplayCoreSceneSetupData
             };
 
-            Logic.FireLevelStarted(m_LevelData);
+            Logic.FireLevelStarted(l_LevelData);
 
-            __instance.didFinishEvent -= OnDidFinishEvent;
-            __instance.didFinishEvent += OnDidFinishEvent;
+            m_LevelData = l_LevelData;
+
+            __instance._missionLevelScenesTransitionSetupData.didFinishEvent -= OnDidFinishEvent;
+            __instance._missionLevelScenesTransitionSetupData.didFinishEvent += OnDidFinishEvent;
         }
 
         ////////////////////////////////////////////////////////////////////////////
@@ -53,13 +55,14 @@ namespace CP_SDK_BS.Game.Patches
         /// </summary>
         /// <param name="p_Transition">Transition data</param>
         /// <param name="p_LevelCompletionResult">Completion result</param>
-        private static void OnDidFinishEvent(StandardLevelScenesTransitionSetupDataSO p_Transition, LevelCompletionResults p_LevelCompletionResult)
+        private static void OnDidFinishEvent(MissionLevelScenesTransitionSetupDataSO p_Transition, MissionCompletionResults p_LevelCompletionResult)
         {
             if (m_LevelData == null)
                 return;
 
-            Logic.FireLevelEnded(new LevelCompletionData() { Type = LevelType.Solo, Data = m_LevelData.Data, Results = p_LevelCompletionResult });
+            Logic.FireLevelEnded(new LevelCompletionData() { Type = LevelType.Solo, Data = m_LevelData.Data, Results = p_LevelCompletionResult.levelCompletionResults });
             m_LevelData = null;
         }
     }
 }
+#endif

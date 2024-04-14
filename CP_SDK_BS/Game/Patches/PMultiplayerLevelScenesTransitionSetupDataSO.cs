@@ -19,7 +19,7 @@ namespace CP_SDK_BS.Game.Patches
         ////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
-        /// Prefix
+        /// Postfix
         /// </summary>
         internal static void Postfix(ref MultiplayerLevelScenesTransitionSetupDataSO __instance)
         {
