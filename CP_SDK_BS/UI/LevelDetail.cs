@@ -489,7 +489,11 @@ namespace CP_SDK_BS.UI
         /// <param name="p_BeatMap">BeatMap</param>
         /// <param name="p_Cover">Cover texture</param>
         /// <returns></returns>
+#if BEATSABER_1_35_0_OR_NEWER
         public bool FromGame(BeatmapLevel p_BeatMap, Sprite p_Cover)
+#else
+        public bool FromGame(CustomPreviewBeatmapLevel p_BeatMap, Sprite p_Cover)
+#endif
         {
             m_LocalBeatMap = null;
             m_BeatMap = null;
