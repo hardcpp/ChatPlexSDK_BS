@@ -862,27 +862,55 @@ namespace CP_SDK_BS.Game
                     Scoring.BeatLeader_ManualWarmUpSubmission();
 
                     var l_BeatmapKey = p_Level.GetBeatmapKeys().FirstOrDefault(x => x.beatmapCharacteristic == p_Characteristic && x.difficulty == p_Difficulty);
-                    m_MenuTransitionsHelper.StartStandardLevel(
-                        /* string */                                                                    gameMode:                       "Solo",
-                        /* in BeatmapKey */                                                             beatmapKey:                     l_BeatmapKey,
-                        /* BeatmapLevel */                                                              beatmapLevel:                   p_Level,
-                        /* IBeatmapLevelData */                                                         beatmapLevelData:               p_BeatmapLevelData,
-                        /* OverrideEnvironmentSettings */                                               overrideEnvironmentSettings:    p_OverrideEnvironmentSettings,
-                        /* ColorScheme */                                                               overrideColorScheme:            p_ColorScheme,
-                        /* ColorScheme */                                                               beatmapOverrideColorScheme:     null,
-                        /* GameplayModifiers */                                                         gameplayModifiers:              p_GameplayModifiers ?? new GameplayModifiers(),
-                        /* PlayerSpecificSettings */                                                    playerSpecificSettings:         p_PlayerSettings    ?? new PlayerSpecificSettings(),
-                        /* PracticeSettings */                                                          practiceSettings:               null,
-                        /* EnvironmentsListModel */                                                     environmentsListModel:          m_SimpleLevelStarter._environmentsListModel,
-                        /* string */                                                                    backButtonText:                 p_MenuButtonText,
-                        /* bool */                                                                      useTestNoteCutSoundEffects:     false,
-                        /* bool */                                                                      startPaused:                    false,
-                        /* Action */                                                                    beforeSceneSwitchCallback:      null,
-                        /* Action<DiContainer> */                                                       afterSceneSwitchCallback:       null,
-                        /* Action<StandardLevelScenesTransitionSetupDataSO, LevelCompletionResults>*/   levelFinishedCallback:          p_SongFinishedCallback,
-                        /* Action<LevelScenesTransitionSetupDataSO, LevelCompletionResults>*/           levelRestartedCallback:         null,
-                        /* RecordingToolManager.SetupData?*/                                            recordingToolData:              null
+
+                    /// Temp beatleader fix
+                    m_MenuTransitionsHelper._standardLevelScenesTransitionSetupData.Init(
+                        "Solo",
+                        l_BeatmapKey,
+                        p_Level,
+                        p_OverrideEnvironmentSettings,
+                        p_ColorScheme,
+                        null,
+                        p_GameplayModifiers ?? new GameplayModifiers(),
+                        p_PlayerSettings ?? new PlayerSpecificSettings(),
+                        null,
+                        m_SimpleLevelStarter._environmentsListModel,
+                        m_MenuTransitionsHelper._audioClipAsyncLoader,
+                        m_MenuTransitionsHelper._beatmapDataLoader,
+                        p_MenuButtonText,
+                        m_MenuTransitionsHelper._beatmapLevelsModel,
+                        false,
+                        false,
+                        null
                     );
+                    m_MenuTransitionsHelper._standardLevelScenesTransitionSetupData.gameplayCoreSceneSetupData.beatmapLevelData = p_BeatmapLevelData;
+                    m_MenuTransitionsHelper._standardLevelFinishedCallback = p_SongFinishedCallback;
+                    m_MenuTransitionsHelper._standardLevelRestartedCallback = null;
+                    m_MenuTransitionsHelper._standardLevelScenesTransitionSetupData.didFinishEvent -= m_MenuTransitionsHelper.HandleMainGameSceneDidFinish;
+                    m_MenuTransitionsHelper._standardLevelScenesTransitionSetupData.didFinishEvent += m_MenuTransitionsHelper.HandleMainGameSceneDidFinish;
+                    m_MenuTransitionsHelper._gameScenesManager.PushScenes(m_MenuTransitionsHelper._standardLevelScenesTransitionSetupData, 0.7f, null, null);
+
+                    //m_MenuTransitionsHelper.StartStandardLevel(
+                    //    /* string */                                                                    gameMode:                       "Solo",
+                    //    /* in BeatmapKey */                                                             beatmapKey:                     l_BeatmapKey,
+                    //    /* BeatmapLevel */                                                              beatmapLevel:                   p_Level,
+                    //    /* IBeatmapLevelData */                                                         beatmapLevelData:               p_BeatmapLevelData,
+                    //    /* OverrideEnvironmentSettings */                                               overrideEnvironmentSettings:    p_OverrideEnvironmentSettings,
+                    //    /* ColorScheme */                                                               overrideColorScheme:            p_ColorScheme,
+                    //    /* ColorScheme */                                                               beatmapOverrideColorScheme:     null,
+                    //    /* GameplayModifiers */                                                         gameplayModifiers:              p_GameplayModifiers ?? new GameplayModifiers(),
+                    //    /* PlayerSpecificSettings */                                                    playerSpecificSettings:         p_PlayerSettings    ?? new PlayerSpecificSettings(),
+                    //    /* PracticeSettings */                                                          practiceSettings:               null,
+                    //    /* EnvironmentsListModel */                                                     environmentsListModel:          m_SimpleLevelStarter._environmentsListModel,
+                    //    /* string */                                                                    backButtonText:                 p_MenuButtonText,
+                    //    /* bool */                                                                      useTestNoteCutSoundEffects:     false,
+                    //    /* bool */                                                                      startPaused:                    false,
+                    //    /* Action */                                                                    beforeSceneSwitchCallback:      null,
+                    //    /* Action<DiContainer> */                                                       afterSceneSwitchCallback:       null,
+                    //    /* Action<StandardLevelScenesTransitionSetupDataSO, LevelCompletionResults>*/   levelFinishedCallback:          p_SongFinishedCallback,
+                    //    /* Action<LevelScenesTransitionSetupDataSO, LevelCompletionResults>*/           levelRestartedCallback:         null,
+                    //    /* RecordingToolManager.SetupData?*/                                            recordingToolData:              null
+                    //);
                 }
                 catch (Exception l_Exception)
                 {
