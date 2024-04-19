@@ -16,7 +16,7 @@ namespace CP_SDK_BS.Game
 #if BEATSABER_1_35_0_OR_NEWER
         static private BeatmapLevel m_PendingFilterSong = null;
 #else
-        static private CustomPreviewBeatmapLevel m_PendingFilterSong = null;
+        static private IPreviewBeatmapLevel m_PendingFilterSong = null;
 #endif
 
         ////////////////////////////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ namespace CP_SDK_BS.Game
 #if BEATSABER_1_35_0_OR_NEWER
         public static bool FilterToSpecificSong(BeatmapLevel p_SongToFilter)
 #else
-        public static bool FilterToSpecificSong(CustomPreviewBeatmapLevel p_SongToFilter)
+        public static bool FilterToSpecificSong(IPreviewBeatmapLevel p_SongToFilter)
 #endif
         {
             m_PendingFilterSong = p_SongToFilter;
