@@ -1117,7 +1117,7 @@ namespace CP_SDK_BS.Game
                 if (!l_Results.ContainsKey(l_BeatmapKey.beatmapCharacteristic))
                     l_Results.Add(l_BeatmapKey.beatmapCharacteristic, new List<(BeatmapDifficulty, int)>());
 
-                if (l_LevelStatsData.TryGetValue(l_BeatmapKey, out var l_PlayerLevelStatsData) && l_PlayerLevelStatsData.validScore)
+                if (l_LevelStatsData.TryGetValue(l_BeatmapKey, out var l_PlayerLevelStatsData) && l_PlayerLevelStatsData.playCount > 0)
                 {
                     p_HaveAnyScore = true;
                     l_Results[l_BeatmapKey.beatmapCharacteristic].Add((l_BeatmapKey.difficulty, l_PlayerLevelStatsData.highScore));
