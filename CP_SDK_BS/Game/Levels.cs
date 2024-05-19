@@ -1,4 +1,7 @@
-﻿using System;
+﻿#if BEATSABER_1_35_0_OR_NEWER
+using BeatSaber.PerformancePresets;
+#endif
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -864,6 +867,13 @@ namespace CP_SDK_BS.Game
 
                     var l_BeatmapKey = p_Level.GetBeatmapKeys().FirstOrDefault(x => x.beatmapCharacteristic == p_Characteristic && x.difficulty == p_Difficulty);
 
+                    PerformancePreset l_PerformancePreset = default(PerformancePreset);
+                    if (!m_MenuTransitionsHelper._graphicSettingsHandler.TryGetCurrentPerformancePreset(out l_PerformancePreset))
+                    {
+                        Debug.LogError("Could not start level as the performance preset could not be decided.");
+                        return;
+                    }
+
                     /// Temp beatleader fix
                     m_MenuTransitionsHelper._standardLevelScenesTransitionSetupData.Init(
                         "Solo",
@@ -878,6 +888,7 @@ namespace CP_SDK_BS.Game
                         m_SimpleLevelStarter._environmentsListModel,
                         m_MenuTransitionsHelper._audioClipAsyncLoader,
                         m_MenuTransitionsHelper._beatmapDataLoader,
+                        l_PerformancePreset,
                         p_MenuButtonText,
                         m_MenuTransitionsHelper._beatmapLevelsModel,
                         false,
@@ -1117,7 +1128,7 @@ namespace CP_SDK_BS.Game
                 if (!l_Results.ContainsKey(l_BeatmapKey.beatmapCharacteristic))
                     l_Results.Add(l_BeatmapKey.beatmapCharacteristic, new List<(BeatmapDifficulty, int)>());
 
-                if (l_LevelStatsData.TryGetValue(l_BeatmapKey, out var l_PlayerLevelStatsData) && l_PlayerLevelStatsData.validScore)
+                if (l_LevelStatsData.TryGetValue(l_BeatmapKey, out var l_PlayerLevelStatsData) && l_PlayerLevelStatsData.playCount > 0)
                 {
                     p_HaveAnyScore = true;
                     l_Results[l_BeatmapKey.beatmapCharacteristic].Add((l_BeatmapKey.difficulty, l_PlayerLevelStatsData.highScore));
