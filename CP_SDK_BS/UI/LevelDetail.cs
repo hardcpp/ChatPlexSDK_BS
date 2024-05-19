@@ -40,7 +40,7 @@ namespace CP_SDK_BS.UI
                 {
                     var l_Loader = new BeatmapLevelLoader(null, new MockBeatmapDataAssetFileModel(), null, null, new BeatmapLevelLoader.InitData(0));
                     var l_Packs = new List<PackDefinitionSO>();
-                    l_Component.SetField("_beatmapLevelsModel", new BeatmapLevelsModel(null, l_Loader, null, l_Packs));
+                    l_Component.SetField("_beatmapLevelsModel", new BeatmapLevelsModel(null, l_Loader, null, null, null, l_Packs));
                     GameObject.DestroyImmediate(l_Component);
                 }
             }
