@@ -877,7 +877,7 @@ namespace CP_SDK_BS.Game
                     /// Temp beatleader fix
                     m_MenuTransitionsHelper._standardLevelScenesTransitionSetupData.Init(
                         "Solo",
-                        l_BeatmapKey,
+                        in l_BeatmapKey,
                         p_Level,
                         p_OverrideEnvironmentSettings,
                         p_ColorScheme,
@@ -891,6 +891,7 @@ namespace CP_SDK_BS.Game
                         l_PerformancePreset,
                         p_MenuButtonText,
                         m_MenuTransitionsHelper._beatmapLevelsModel,
+                        m_MenuTransitionsHelper._beatmapLevelsEntitlementModel,
                         false,
                         false,
                         null
@@ -1013,6 +1014,9 @@ namespace CP_SDK_BS.Game
             if (m_BeatmapLevelsModel == null)
                 m_BeatmapLevelsModel = Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().FirstOrDefault(x => x._beatmapLevelsModel != null)?._beatmapLevelsModel;
 
+            if (!m_MenuTransitionsHelper)
+                m_MenuTransitionsHelper = Resources.FindObjectsOfTypeAll<MenuTransitionsHelper>().First();
+
             if (m_BeatmapLevelsModel != null)
             {
                 m_GetLevelCancellationTokenSource?.Cancel();
@@ -1023,7 +1027,9 @@ namespace CP_SDK_BS.Game
                 LoadBeatmapLevelDataResult? l_Result = null;
                 try
                 {
-                    l_Result = await m_BeatmapLevelsModel.LoadBeatmapLevelDataAsync(p_LevelID, l_Token).ConfigureAwait(false);
+                    var l_BeatmapLevelDataVersion = await m_MenuTransitionsHelper._beatmapLevelsEntitlementModel.GetLevelDataVersionAsync(p_LevelID, l_Token);
+                    l_Token.ThrowIfCancellationRequested();
+                    l_Result = await m_BeatmapLevelsModel.LoadBeatmapLevelDataAsync(p_LevelID, l_BeatmapLevelDataVersion, l_Token).ConfigureAwait(false);
                 }
                 catch (OperationCanceledException l_Exception)
                 {
