@@ -48,7 +48,7 @@ namespace ChatPlexSDK_BS
             CP_SDK.ChatPlexSDK.Configure(
                 new CP_SDK.Logging.IPALogger(p_Logger),
                 "BeatSaber",
-                Environment.CurrentDirectory,
+                "./",
                 CP_SDK.ERenderPipeline.BuiltIn
             );
             CP_SDK.ChatPlexSDK.OnAssemblyLoaded();
