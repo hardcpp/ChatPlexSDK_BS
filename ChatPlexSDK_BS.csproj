@@ -281,10 +281,15 @@
     <Compile Include="CP_SDK\ChatPlexSDK.cs" />
     <Compile Include="CP_SDK\Chat\Interfaces\EBadgeType.cs" />
     <Compile Include="CP_SDK\Chat\Interfaces\IChatServiceResourceProvider.cs" />
+    <Compile Include="CP_SDK\Chat\Models\Twitch\TwitchTempChannel.cs" />
     <Compile Include="CP_SDK\Chat\Models\Twitch\TwitchCheermoteTier.cs" />
+    <Compile Include="CP_SDK\Chat\Models\Twitch\TwitchHelixQuery.cs" />
     <Compile Include="CP_SDK\Chat\Services\ChatPlexGradientNamesDataProvider.cs" />
     <Compile Include="CP_SDK\Chat\Services\RelayChatService.cs" />
     <Compile Include="CP_SDK\Chat\Services\RelayChatServiceProtocol.cs" />
+    <Compile Include="CP_SDK\Chat\Services\Twitch\TwitchIRCLegacyCommandEmulator.cs" />
+    <Compile Include="CP_SDK\Chat\Services\Twitch\TwitchEventSub.cs" />
+    <Compile Include="CP_SDK\Chat\Services\Twitch\TwitchPubSub.cs" />
     <Compile Include="CP_SDK\Chat\Utilities\7TVUtils.cs" />
     <Compile Include="CP_SDK\Config\JsonConverters\QuaternionConverter.cs" />
     <Compile Include="CP_SDK\CPConfig.cs" />
@@ -460,7 +465,9 @@
     <Compile Include="CP_SDK\Network\websocket-sharp\WebSocketFrame.cs" />
     <Compile Include="CP_SDK\Network\websocket-sharp\WebSocketState.cs" />
     <Compile Include="CP_SDK\Network\WebSocketClient.cs" />
+    <Compile Include="CP_SDK\OBS\Models\Transition.cs" />
     <Compile Include="CP_SDK\OBS\OBSModSettings.cs" />
+    <Compile Include="CP_SDK\OBS\Service_PayloadHandlers.cs" />
     <Compile Include="CP_SDK\Pool\CollectionPool.cs" />
     <Compile Include="CP_SDK\Pool\ListPool.cs" />
     <Compile Include="CP_SDK\UI\Components\CColorInput.cs" />
@@ -683,10 +690,10 @@
     <Compile Include="CP_SDK\Misc\Base64.cs" />
     <Compile Include="CP_SDK\Misc\Resources.cs" />
     <Compile Include="CP_SDK\OBS\Models\Scene.cs" />
-    <Compile Include="CP_SDK\OBS\Models\Source.cs" />
+    <Compile Include="CP_SDK\OBS\Models\SceneItem.cs" />
     <Compile Include="CP_SDK\OBS\Service.cs" />
     <Compile Include="CP_SDK\OBS\Service_RequestHandlers.cs" />
-    <Compile Include="CP_SDK\OBS\Service_UpdateHandlers.cs" />
+    <Compile Include="CP_SDK\OBS\Service_EventHandlers.cs" />
     <Compile Include="CP_SDK\Pool\IObjectPool.cs" />
     <Compile Include="CP_SDK\Pool\MTCollectionPool.cs" />
     <Compile Include="CP_SDK\Pool\MTDictionaryPool.cs" />
@@ -704,7 +711,7 @@
     <Compile Include="CP_SDK\Chat\Models\Twitch\TwitchChannelPointEvent.cs" />
     <Compile Include="CP_SDK\Chat\Models\Twitch\TwitchCheermoteData.cs" />
     <Compile Include="CP_SDK\Chat\Models\Twitch\TwitchEmote.cs" />
-    <Compile Include="CP_SDK\Chat\Models\Twitch\TwitchHelix.cs" />
+    <Compile Include="CP_SDK\Chat\Models\Twitch\TwitchHelixModel.cs" />
     <Compile Include="CP_SDK\Chat\Models\Twitch\TwitchMessage.cs" />
     <Compile Include="CP_SDK\Chat\Models\Twitch\TwitchPubSubMessages.cs" />
     <Compile Include="CP_SDK\Chat\Models\Twitch\TwitchRoomstate.cs" />
@@ -791,6 +798,8 @@
   <ItemGroup>
     <None Include="BuildTargets.targets" />
     <EmbeddedResource Include="CP_SDK\_Resources\ChatPlexLogoLoading.webp" />
+    <EmbeddedResource Include="CP_SDK\_Resources\CP_SDK.BuiltIn.u2021.bundle" />
+    <EmbeddedResource Include="CP_SDK\_Resources\CP_SDK.BuiltIn.u2022.bundle" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CP_SDK_BS\UI\Resources\NJS.png" />
