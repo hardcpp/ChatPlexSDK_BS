@@ -456,6 +456,20 @@ namespace CP_SDK_BS.Game
 
             return false;
         }
+        /// <summary>
+        /// Try to get IPreviewBeatmapLevel by Hash
+        /// </summary>
+        /// <param name="p_Hash">Hash of the level</param>
+        /// <param name="p_PreviewBeatmapLevel">OUT Found PreviewBeatmapLevel or null</param>
+        /// <returns>true or false </returns>
+        public static bool TryGetPreviewBeatmapLevelForHash(string p_Hash, out IPreviewBeatmapLevel p_PreviewBeatmapLevel)
+        {
+            p_PreviewBeatmapLevel = null;
+            if (!TryGetLevelIDFromHash(p_Hash, out var l_LevelID))
+                return false;
+
+            return TryGetPreviewBeatmapLevelForLevelID(l_LevelID, out p_PreviewBeatmapLevel);
+        }
 #endif
 
         ////////////////////////////////////////////////////////////////////////////
