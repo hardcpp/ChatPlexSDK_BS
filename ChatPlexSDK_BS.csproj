@@ -26,14 +26,14 @@
     <DebugSymbols>true</DebugSymbols>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CP_SDK_IPA;CP_SDK_UNITY;BEATSABER;UNITY_5_3_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2019_1_OR_NEWER UNITY_STANDALONE_WIN;UNITY_2018_3_OR_NEWER;NETSTANDARD;BEATSABER_1_35_0_OR_NEWER</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;CP_SDK_IPA;CP_SDK_UNITY;BEATSABER;UNITY_5_3_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2019_1_OR_NEWER UNITY_STANDALONE_WIN;UNITY_2018_3_OR_NEWER;NETSTANDARD;BEATSABER_1_35_0_OR_NEWER;BEATSABER_1_38_0_OR_NEWER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>CP_SDK_IPA;CP_SDK_UNITY;BEATSABER;UNITY_5_3_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2019_1_OR_NEWER UNITY_STANDALONE_WIN;UNITY_2018_3_OR_NEWER;NETSTANDARD;BEATSABER_1_35_0_OR_NEWER</DefineConstants>
+    <DefineConstants>CP_SDK_IPA;CP_SDK_UNITY;BEATSABER;UNITY_5_3_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2019_1_OR_NEWER UNITY_STANDALONE_WIN;UNITY_2018_3_OR_NEWER;NETSTANDARD;BEATSABER_1_35_0_OR_NEWER;BEATSABER_1_38_0_OR_NEWER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>
@@ -84,12 +84,8 @@
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatmapCore.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="BeatSaber.GameSettings">
-      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatSaber.GameSettings.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="BeatSaber.PerformancePresets">
-      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatSaber.PerformancePresets.dll</HintPath>
+    <Reference Include="BeatSaber.ViewSystem" Publicize="true">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatSaber.ViewSystem.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="BGLib.AppFlow" Publicize="true">
@@ -106,10 +102,6 @@
     </Reference>
     <Reference Include="BGLib.UnityExtension">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BGLib.UnityExtension.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="BGNet">
-      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BGNet.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="BGNetCore">
@@ -144,6 +136,9 @@
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMRendering.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Interactable">
+      <HintPath>P:\BSManager\BSInstances\1.38.0\Beat Saber_Data\Managed\Interactable.dll</HintPath>
+    </Reference>
     <Reference Include="MediaLoader">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\MediaLoader.dll</HintPath>
       <Private>False</Private>
@@ -154,6 +149,10 @@
     </Reference>
     <Reference Include="PlatformUserModel">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\PlatformUserModel.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SegmentedControl" Publicize="true">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\SegmentedControl.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="SongCore">

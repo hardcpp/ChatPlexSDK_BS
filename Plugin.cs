@@ -104,7 +104,12 @@ namespace ChatPlexSDK_BS
                     CP_SDK.UI.FlowCoordinators.MainFlowCoordinator.OverrideTitle("BeatSaberPlus");
 
                     CP_SDK.ChatPlexSDK.Logger.Debug("Adding menu button.");
+
+#if BEATSABER_1_38_0_OR_NEWER
+                    CP_SDK_BS.Game.Logic.OnMenuSceneLoaded += Logic_OnMenuSceneLoaded;
+#else
                     MenuButtons.instance.RegisterButton(new MenuButton("BeatSaber+", "Feel good!", OnModButtonPressed, true));
+#endif
                 }
             }
             catch (Exception p_Exception)
@@ -123,6 +128,21 @@ namespace ChatPlexSDK_BS
             CP_SDK.ChatPlexSDK.OnUnityExit();
             CP_SDK.ChatPlexSDK.OnAssemblyExit();
         }
+
+        ////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////
+
+#if BEATSABER_1_38_0_OR_NEWER
+        /// <summary>
+        /// On menu scene loaded
+        /// </summary>
+        private void Logic_OnMenuSceneLoaded()
+        {
+            CP_SDK_BS.Game.Logic.OnMenuSceneLoaded -= Logic_OnMenuSceneLoaded;
+            MenuButtons.Instance.RegisterButton(new MenuButton("BeatSaber+", "Feel good!", OnModButtonPressed, true));
+        }
+
+#endif
 
         ////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////
