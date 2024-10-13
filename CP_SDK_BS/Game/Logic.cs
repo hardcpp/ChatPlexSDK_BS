@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using Zenject;
+using static GameScenesManager;
 
 namespace CP_SDK_BS.Game
 {
@@ -129,12 +130,22 @@ namespace CP_SDK_BS.Game
                 CP_SDK.ChatPlexSDK.Logger.Error(p_Exception);
             }
         }
+#if BEATSABER_1_38_0_OR_NEWER
+        /// <summary>
+        /// On menu scene loaded
+        /// </summary>
+        /// <param name="p_SceneTransitionType">Scene transition type</param>
+        /// <param name="p_Object">Transition object</param>
+        /// <param name="p_DiContainer">Container</param>
+        private static void OnMenuSceneLoadedFresh(SceneTransitionType p_SceneTransitionType, ScenesTransitionSetupDataSO p_Object, DiContainer p_DiContainer)
+#else
         /// <summary>
         /// On menu scene loaded
         /// </summary>
         /// <param name="p_Object">Transition object</param>
         /// <param name="p_DiContainer">Container</param>
         private static void OnMenuSceneLoadedFresh(ScenesTransitionSetupDataSO p_Object, DiContainer p_DiContainer)
+#endif
         {
 #if DEBUG_SCENES || DEBUG
             CP_SDK.ChatPlexSDK.Logger?.Error("====== [SDK.Game][Logic.OnMenuSceneLoadedFresh] ======");

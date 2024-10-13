@@ -1,7 +1,4 @@
-﻿#if BEATSABER_1_35_0_OR_NEWER
-using BeatSaber.PerformancePresets;
-#endif
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -673,7 +670,12 @@ namespace CP_SDK_BS.Game
             var l_CoverTask = null as Task<Sprite>;
             try
             {
+
+#if BEATSABER_1_38_0_OR_NEWER
+                l_CoverTask = p_BeatmapLevel.previewMediaData.GetCoverSpriteAsync();
+#else
                 l_CoverTask = p_BeatmapLevel.previewMediaData.GetCoverSpriteAsync(CancellationToken.None);
+#endif
                 l_CoverTask.ContinueWith((x) =>
                 {
                     if (x != null && x.IsCompleted && x.Result)
@@ -881,12 +883,14 @@ namespace CP_SDK_BS.Game
 
                     var l_BeatmapKey = p_Level.GetBeatmapKeys().FirstOrDefault(x => x.beatmapCharacteristic == p_Characteristic && x.difficulty == p_Difficulty);
 
+#if !BEATSABER_1_38_0_OR_NEWER
                     PerformancePreset l_PerformancePreset = default(PerformancePreset);
                     if (!m_MenuTransitionsHelper._graphicSettingsHandler.TryGetCurrentPerformancePreset(out l_PerformancePreset))
                     {
                         Debug.LogError("Could not start level as the performance preset could not be decided.");
                         return;
                     }
+#endif
 
                     /// Temp beatleader fix
                     m_MenuTransitionsHelper._standardLevelScenesTransitionSetupData.Init(
@@ -902,7 +906,11 @@ namespace CP_SDK_BS.Game
                         m_SimpleLevelStarter._environmentsListModel,
                         m_MenuTransitionsHelper._audioClipAsyncLoader,
                         m_MenuTransitionsHelper._beatmapDataLoader,
+#if BEATSABER_1_38_0_OR_NEWER
+                        m_MenuTransitionsHelper._settingsManager,
+#else
                         l_PerformancePreset,
+#endif
                         p_MenuButtonText,
                         m_MenuTransitionsHelper._beatmapLevelsModel,
                         m_MenuTransitionsHelper._beatmapLevelsEntitlementModel,
