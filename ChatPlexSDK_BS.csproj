@@ -293,6 +293,7 @@
     <Compile Include="CP_SDK\Chat\Utilities\7TVUtils.cs" />
     <Compile Include="CP_SDK\Config\JsonConverters\QuaternionConverter.cs" />
     <Compile Include="CP_SDK\CPConfig.cs" />
+    <Compile Include="CP_SDK\Logging\ConsoleLogger.cs" />
     <Compile Include="CP_SDK\Logging\IPALogger.cs" />
     <Compile Include="CP_SDK\Logging\ILogger.cs" />
     <Compile Include="CP_SDK\Logging\UnityLogger.cs" />
