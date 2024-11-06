@@ -138,10 +138,8 @@ namespace ChatPlexSDK_BS
         /// </summary>
         private void Logic_OnMenuSceneLoaded()
         {
-            CP_SDK_BS.Game.Logic.OnMenuSceneLoaded -= Logic_OnMenuSceneLoaded;
             MenuButtons.Instance.RegisterButton(new MenuButton("BeatSaber+", "Feel good!", OnModButtonPressed, true));
         }
-
 #endif
 
         ////////////////////////////////////////////////////////////////////////////
