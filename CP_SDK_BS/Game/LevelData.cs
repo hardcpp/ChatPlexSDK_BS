@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using BeatmapSaveDataCommon;
+using BeatmapSaveDataVersion4;
+using System.Linq;
 
 namespace CP_SDK_BS.Game
 {
@@ -27,7 +29,12 @@ namespace CP_SDK_BS.Game
         {
             get
             {
-                return Data?.transformedBeatmapData?.spawnRotationEventsCount > 0;
+                var l_SpawnRotationEventsCount = Data?.transformedBeatmapData?.allBeatmapDataItems.Count(
+                    x => x.type == BeatmapDataItem.BeatmapDataItemType.BeatmapObject 
+                        && (x as BeatmapObjectData).rotation != 0
+                );
+
+                return l_SpawnRotationEventsCount > 0;
             }
         }
 
