@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Web.UI;
 using TMPro;
 using UnityEngine;
 
@@ -52,6 +53,13 @@ namespace CP_SDK_BS.UI
 #else
             GameObject.DestroyImmediate(m_SongDetailViewTemplate.GetComponent<StandardLevelDetailView>());
 #endif
+        }
+        /// <summary>
+        /// When the game is reloaded
+        /// </summary>
+        public static void OnGameSoftReload()
+        {
+            m_SongDetailViewTemplate = null;
         }
 
         ////////////////////////////////////////////////////////////////////////////

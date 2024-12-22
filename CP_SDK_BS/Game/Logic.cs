@@ -84,6 +84,10 @@ namespace CP_SDK_BS.Game
                         {
                             l_GameScenesManager.transitionDidFinishEvent -= OnMenuSceneLoadedFresh;
                             l_GameScenesManager.transitionDidFinishEvent += OnMenuSceneLoadedFresh;
+
+                            UI.HMUIIconSegmentedControl.OnGameSoftReload();
+                            UI.HMUITextSegmentedControl.OnGameSoftReload();
+                            UI.LevelDetail.OnGameSoftReload();
                         }
                     }
 

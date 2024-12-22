@@ -15,6 +15,17 @@ namespace CP_SDK_BS.UI
         ////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
+        /// When the game is reloaded
+        /// </summary>
+        public static void OnGameSoftReload()
+        {
+            m_Template = null;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
         /// Create icon segmented control
         /// </summary>
         /// <param name="p_Parent">Parent game object transform</param>
