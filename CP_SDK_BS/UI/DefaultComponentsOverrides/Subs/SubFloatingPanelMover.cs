@@ -71,8 +71,8 @@ namespace CP_SDK_BS.UI.DefaultComponentsOverrides.Subs
                 if (m_GrabbingController)
                     return;
 
-                var l_HitCount = Physics.RaycastNonAlloc(   l_VRControllerTransform.position,
-                                                            l_VRControllerTransform.forward,
+                var l_HitCount = Physics.RaycastNonAlloc(   l_VRController.viewAnchorTransform.position,
+                                                            l_VRController.viewAnchorTransform.forward,
                                                             m_RaycastBuffer,
                                                             MaxLaserDistance,
                                                             1 << CP_SDK.UI.UISystem.UILayer);
