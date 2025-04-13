@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Policy;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -536,11 +535,11 @@ namespace CP_SDK_BS.Game
                 || !TryGetHashFromLevelID(p_BeatmapLevel.levelID, out var l_LevelHash))
                 return false;
 
-            var l_SongData = SongCore.Collections.GetCustomLevelSongData(CustomLevelLoader.kCustomLevelPrefixId + l_LevelHash);
-            if (l_SongData == null)
+            var l_ExtraData = SongCore.Collections.RetrieveExtraSongData(l_LevelHash);
+            if (l_ExtraData == null)
                 return false;
 
-            var l_CustomData = l_SongData._difficulties.FirstOrDefault((x) =>
+            var l_CustomData = l_ExtraData._difficulties.FirstOrDefault((x) =>
             {
                 return x._difficulty == p_BeatmapDifficulty
                         && (
@@ -900,7 +899,6 @@ namespace CP_SDK_BS.Game
                         p_Level,
                         p_OverrideEnvironmentSettings,
                         p_ColorScheme,
-                        false,/*playerOverrideLightshowColors*/
                         null,
                         p_GameplayModifiers ?? new GameplayModifiers(),
                         p_PlayerSettings ?? new PlayerSpecificSettings(),
