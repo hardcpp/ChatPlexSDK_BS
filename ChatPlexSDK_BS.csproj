@@ -292,7 +292,6 @@
     <Compile Include="CP_SDK\Chat\Services\RelayChatServiceProtocol.cs" />
     <Compile Include="CP_SDK\Chat\Services\Twitch\TwitchIRCLegacyCommandEmulator.cs" />
     <Compile Include="CP_SDK\Chat\Services\Twitch\TwitchEventSub.cs" />
-    <Compile Include="CP_SDK\Chat\Services\Twitch\TwitchPubSub.cs" />
     <Compile Include="CP_SDK\Chat\Utilities\7TVUtils.cs" />
     <Compile Include="CP_SDK\Config\JsonConverters\QuaternionConverter.cs" />
     <Compile Include="CP_SDK\CPConfig.cs" />
@@ -717,7 +716,6 @@
     <Compile Include="CP_SDK\Chat\Models\Twitch\TwitchEmote.cs" />
     <Compile Include="CP_SDK\Chat\Models\Twitch\TwitchHelixModel.cs" />
     <Compile Include="CP_SDK\Chat\Models\Twitch\TwitchMessage.cs" />
-    <Compile Include="CP_SDK\Chat\Models\Twitch\TwitchPubSubMessages.cs" />
     <Compile Include="CP_SDK\Chat\Models\Twitch\TwitchRoomstate.cs" />
     <Compile Include="CP_SDK\Chat\Models\Twitch\TwitchSubscriptionEvent.cs" />
     <Compile Include="CP_SDK\Chat\Models\Twitch\TwitchUser.cs" />
