@@ -126,8 +126,8 @@ namespace CP_SDK_BS.Game
                 return false;
 
             p_Hash = p_LevelID.Substring(13);
-            if (p_Hash.Length == 40/* TODO check for only hex*/)
-                p_Hash = p_Hash.ToUpper();
+            if (p_Hash.Length >= 40 && OnlyHexInString(p_Hash.Substring(0, 40)))
+                p_Hash = p_Hash.Substring(0, 40).ToUpper();
 
             return true;
         }
@@ -373,14 +373,11 @@ namespace CP_SDK_BS.Game
             var l_LevelID = SanitizeLevelID(p_LevelID);
             if (LevelID_IsCustom(l_LevelID))
             {
-                if (SongCore.Loader.CustomLevels != null)
+                var l_Custom = SongCore.Loader.GetLevelById(l_LevelID);
+                if (l_Custom != null)
                 {
-                    var l_Custom = SongCore.Loader.CustomLevels.Select(x => x.Value).Where(x => x.levelID.Equals(l_LevelID, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-                    if (l_Custom != null)
-                    {
-                        p_BeatmapLevel = l_Custom;
-                        return true;
-                    }
+                    p_BeatmapLevel = l_Custom;
+                    return true;
                 }
             }
 
@@ -1173,14 +1170,22 @@ namespace CP_SDK_BS.Game
             return l_Results;
         }
 #else
+
+        ////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////
+
         /// <summary>
         /// Get scores from local cache for a level id
+        /// Is hex only string
         /// </summary>
         /// <param name="p_LevelID">Level ID</param>
         /// <param name="p_HaveAnyScore">Have any score set</param>
         /// <param name="p_HaveAllScores">Have all scores set</param>
         /// <returns>Scores</returns>
         public static Dictionary<BeatmapCharacteristicSO, List<(BeatmapDifficulty, int)>> GetScoresByLevelID(string p_LevelID, out bool p_HaveAnyScore, out bool p_HaveAllScores)
+        /// <param name="p_Value">Value to test</param>
+        /// <returns></returns>
+        private static bool OnlyHexInString(string p_Value)
         {
             var l_Results = new Dictionary<BeatmapCharacteristicSO, List<(BeatmapDifficulty, int)>>();
 
@@ -1218,6 +1223,8 @@ namespace CP_SDK_BS.Game
             }
 
             return l_Results;
+            // For C-style hex notation (0xFF) you can use @"\A\b(0[xX])?[0-9a-fA-F]+\b\Z"
+            return System.Text.RegularExpressions.Regex.IsMatch(p_Value, @"\A\b[0-9a-fA-F]+\b\Z");
         }
 #endif
     }
