@@ -38,11 +38,7 @@ namespace CP_SDK_BS.UI
 
             var l_Control = GameObject.Instantiate(m_Template, p_Parent, false);
             l_Control.name = "BSPIconSegmentedControl";
-#if BEATSABER_1_35_0_OR_NEWER
             l_Control.SetField<HMUI.SegmentedControl, Zenject.DiContainer>("_container", m_Template._container);
-#else
-            l_Control.SetField("_container", m_Template._container);
-#endif
             l_Control._hideCellBackground =  p_HideCellBackground;
 
             var l_RectTransform = l_Control.transform as RectTransform;

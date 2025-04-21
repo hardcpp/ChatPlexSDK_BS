@@ -31,11 +31,7 @@ namespace CP_SDK_BS.UI.Data
 
         public string                       TitlePrefix         = string.Empty;
         public Game.BeatMaps.MapDetail      BeatSaver_Map       = null;
-#if BEATSABER_1_35_0_OR_NEWER
         public BeatmapLevel                 LocalLevel          = null;
-#else
-        public IPreviewBeatmapLevel         LocalLevel          = null;
-#endif
         public Sprite                       Cover               = null;
         public string                       Tooltip             = string.Empty;
         public SongListController           SongListController  = null;
@@ -93,14 +89,8 @@ namespace CP_SDK_BS.UI.Data
 
             if (LocalLevel == null && BeatSaver_Map != null && !BeatSaver_Map.Partial)
             {
-#if BEATSABER_1_35_0_OR_NEWER
                 if (Game.Levels.TryGetBeatmapLevelForHash(GetLevelHash(), out var l_LocalLevel))
                     LocalLevel = l_LocalLevel;
-#else
-                var l_LocalLevel = SongCore.Loader.GetLevelByHash(GetLevelHash().ToUpper());
-                if (l_LocalLevel != null && SongCore.Loader.CustomLevels.ContainsKey(l_LocalLevel.customLevelPath))
-                    LocalLevel = l_LocalLevel;
-#endif
             }
 
             m_WasInit = true;
@@ -173,7 +163,6 @@ namespace CP_SDK_BS.UI.Data
 
             if ((BeatSaver_Map != null && !BeatSaver_Map.Partial) || LocalLevel != null)
             {
-#if BEATSABER_1_35_0_OR_NEWER
                 var l_HaveSong  = Game.Levels.TryGetBeatmapLevelForLevelID(GetLevelID(), out _);
                 var l_Scores    = Game.Levels.GetScoresByLevelID(GetLevelID(), out var l_HaveAnyScore, out var l_HaveAllScores);
 
@@ -182,16 +171,6 @@ namespace CP_SDK_BS.UI.Data
                 var l_MapSongAuthor = LocalLevel != null ? LocalLevel.songAuthorName                : BeatSaver_Map.metadata.songAuthorName;
                 var l_Duration      = GetLevelDuration();
                 var l_BPM           = LocalLevel != null ? LocalLevel.beatsPerMinute                : BeatSaver_Map.metadata.bpm;
-#else
-                var l_HaveSong  = SongCore.Loader.GetLevelById(GetLevelID()) != null;
-                var l_Scores    = Game.Levels.GetScoresByLevelID(GetLevelID(), out var l_HaveAnyScore, out var l_HaveAllScores);
-
-                var l_MapName       = LocalLevel != null ? LocalLevel.songName        : BeatSaver_Map.name;
-                var l_MapAuthor     = LocalLevel != null ? LocalLevel.levelAuthorName : BeatSaver_Map.metadata.levelAuthorName;
-                var l_MapSongAuthor = LocalLevel != null ? LocalLevel.songAuthorName  : BeatSaver_Map.metadata.songAuthorName;
-                var l_Duration      = LocalLevel != null ? LocalLevel.songDuration    : BeatSaver_Map.metadata.duration;
-                var l_BPM           = LocalLevel != null ? LocalLevel.beatsPerMinute  : BeatSaver_Map.metadata.bpm;
-#endif
 
                 if (l_Scores.Count != 0)
                 {
@@ -273,12 +252,7 @@ namespace CP_SDK_BS.UI.Data
             if (m_SongPreviewPlayer == null || !m_SongPreviewPlayer || !l_PlayPreviewAudio)
                 return;
 
-#if BEATSABER_1_35_0_OR_NEWER
             if (Game.Levels.TryGetBeatmapLevelForLevelID(GetLevelID(), out var l_LocalSong))
-#else
-            var l_LocalSong = SongCore.Loader.GetLevelByHash(GetLevelHash());
-            if (l_LocalSong != null)
-#endif
             {
                 if (m_AudioClipCache.TryGetValue(GetLevelHash(), out var l_AudioClip))
                 {
@@ -291,12 +265,8 @@ namespace CP_SDK_BS.UI.Data
                 {
                     m_LoadAudioToken.Cancel();
 
-#if BEATSABER_1_35_0_OR_NEWER
                     if (l_LocalSong.previewMediaData is FileSystemPreviewMediaData l_FileSystemPreviewMediaData)
                         CP_SDK.Unity.MTCoroutineStarter.Start(Coroutine_GetAudioAsync(l_FileSystemPreviewMediaData._previewAudioClipPath, l_PreviewAudioVolume));
-#else
-                    CP_SDK.Unity.MTCoroutineStarter.Start(Coroutine_GetAudioAsync(l_LocalSong.songPreviewAudioClipPath, l_PreviewAudioVolume));
-#endif
                 }
             }
             else
@@ -339,22 +309,9 @@ namespace CP_SDK_BS.UI.Data
                 return;
             }
 
-#if BEATSABER_1_35_0_OR_NEWER
             if (Game.Levels.TryGetBeatmapLevelForLevelID(GetLevelID(), out var l_LocalSong))
-#else
-            var l_LocalSong = SongCore.Loader.GetLevelById(GetLevelHash());
-            if (l_LocalSong != null)
-#endif
             {
-#if BEATSABER_1_35_0_OR_NEWER
                 Game.Levels.TryLoadBeatmapLevelCoverAsync(l_LocalSong, (_, p_Sprite) => CoverLoaded(p_Sprite));
-#else
-                var l_CoverTask = l_LocalSong.GetCoverImageAsync(CancellationToken.None);
-                _ = l_CoverTask.ContinueWith(p_CoverTaskResult =>
-                {
-                    CP_SDK.Unity.MTMainThreadInvoker.Enqueue(() => CoverLoaded(p_CoverTaskResult.Result));
-                });
-#endif
             }
             else if (BeatSaver_Map != null)
             {

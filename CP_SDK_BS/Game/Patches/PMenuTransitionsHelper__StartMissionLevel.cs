@@ -1,5 +1,4 @@
-﻿#if BEATSABER_1_35_0_OR_NEWER
-using HarmonyLib;
+﻿using HarmonyLib;
 
 namespace CP_SDK_BS.Game.Patches
 {
@@ -65,4 +64,3 @@ namespace CP_SDK_BS.Game.Patches
         }
     }
 }
-#endif

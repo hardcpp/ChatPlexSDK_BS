@@ -58,11 +58,7 @@ namespace CP_SDK_BS.UI.DefaultComponentsOverrides.Subs
         {
             var l_IsFPFC        = IsFPFC();
 
-#if BEATSABER_1_35_0_OR_NEWER
             var l_VRController          = m_VRPointer?.lastSelectedVrController;
-#else
-            var l_VRController          = m_VRPointer?.vrController;
-#endif
             var l_VRControllerTransform = l_VRController?.transform;
             var l_ButtonDown            = l_VRController?.triggerValue > 0.9f || (l_IsFPFC && Input.GetMouseButton(0));
 
@@ -110,11 +106,7 @@ namespace CP_SDK_BS.UI.DefaultComponentsOverrides.Subs
             if (!m_GrabbingController)
                 return;
 
-#if BEATSABER_1_35_0_OR_NEWER
             var l_Delta = m_GrabbingController.thumbstick.y * Time.unscaledDeltaTime;
-#else
-            var l_Delta = m_GrabbingController.verticalAxisValue * Time.unscaledDeltaTime;
-#endif
             if (m_GrabPosition.magnitude > MinScrollDistance)   m_GrabPosition -= Vector3.forward * l_Delta;
             else                                                m_GrabPosition -= Vector3.forward * Mathf.Clamp(l_Delta, float.MinValue, 0f);
 

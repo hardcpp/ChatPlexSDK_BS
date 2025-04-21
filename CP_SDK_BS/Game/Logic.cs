@@ -134,7 +134,6 @@ namespace CP_SDK_BS.Game
                 CP_SDK.ChatPlexSDK.Logger.Error(p_Exception);
             }
         }
-#if BEATSABER_1_38_0_OR_NEWER
         /// <summary>
         /// On menu scene loaded
         /// </summary>
@@ -142,14 +141,6 @@ namespace CP_SDK_BS.Game
         /// <param name="p_Object">Transition object</param>
         /// <param name="p_DiContainer">Container</param>
         private static void OnMenuSceneLoadedFresh(SceneTransitionType p_SceneTransitionType, ScenesTransitionSetupDataSO p_Object, DiContainer p_DiContainer)
-#else
-        /// <summary>
-        /// On menu scene loaded
-        /// </summary>
-        /// <param name="p_Object">Transition object</param>
-        /// <param name="p_DiContainer">Container</param>
-        private static void OnMenuSceneLoadedFresh(ScenesTransitionSetupDataSO p_Object, DiContainer p_DiContainer)
-#endif
         {
 #if DEBUG_SCENES || DEBUG
             CP_SDK.ChatPlexSDK.Logger?.Error("====== [SDK.Game][Logic.OnMenuSceneLoadedFresh] ======");
@@ -201,11 +192,7 @@ namespace CP_SDK_BS.Game
                         {
                             case LevelType.Solo:
                                 Patches.PStandardLevelScenesTransitionSetupDataSO.RestoreLevelData(LevelData);
-#if BEATSABER_1_35_0_OR_NEWER
                                 Patches.PMenuTransitionsHelper__StartMissionLevel.RestoreLevelData(LevelData);
-#else
-                                Patches.PMissionLevelScenesTransitionSetupDataSO.RestoreLevelData(LevelData);
-#endif
                                 break;
 
                             case LevelType.Multiplayer:

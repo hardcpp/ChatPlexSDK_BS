@@ -26,14 +26,14 @@
     <DebugSymbols>true</DebugSymbols>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CP_SDK_IPA;CP_SDK_UNITY;BEATSABER;UNITY_5_3_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2019_1_OR_NEWER UNITY_STANDALONE_WIN;UNITY_2018_3_OR_NEWER;NETSTANDARD;BEATSABER_1_35_0_OR_NEWER;BEATSABER_1_38_0_OR_NEWER</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;CP_SDK_IPA;CP_SDK_UNITY;BEATSABER;UNITY_5_3_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2019_1_OR_NEWER UNITY_STANDALONE_WIN;UNITY_2018_3_OR_NEWER;NETSTANDARD</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>CP_SDK_IPA;CP_SDK_UNITY;BEATSABER;UNITY_5_3_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2019_1_OR_NEWER UNITY_STANDALONE_WIN;UNITY_2018_3_OR_NEWER;NETSTANDARD;BEATSABER_1_35_0_OR_NEWER;BEATSABER_1_38_0_OR_NEWER</DefineConstants>
+    <DefineConstants>CP_SDK_IPA;CP_SDK_UNITY;BEATSABER;UNITY_5_3_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2019_1_OR_NEWER UNITY_STANDALONE_WIN;UNITY_2018_3_OR_NEWER;NETSTANDARD</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>
@@ -585,7 +585,6 @@
     <Compile Include="CP_SDK\XUI\XUITextInput.cs" />
     <Compile Include="CP_SDK\XUI\XUITextSegmentedControl.cs" />
     <Compile Include="CP_SDK\XUI\XUIVVList.cs" />
-    <Compile Include="CP_SDK_BS\Game\Patches\PMissionLevelScenesTransitionSetupDataSO.cs" />
     <Compile Include="CP_SDK_BS\Game\PlayerAvatarPicture.cs" />
     <Compile Include="CP_SDK_BS\UI\CP_SDK_UI_IViewControllerBridge.cs" />
     <Compile Include="CP_SDK_BS\UI\Data\SongListCell.cs" />

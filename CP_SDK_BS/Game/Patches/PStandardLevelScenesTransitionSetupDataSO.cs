@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using IPA.Utilities;
 
 namespace CP_SDK_BS.Game.Patches
 {
@@ -7,11 +6,7 @@ namespace CP_SDK_BS.Game.Patches
     /// Level data finder
     /// </summary>
     [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO))]
-#if BEATSABER_1_35_0_OR_NEWER
     [HarmonyPatch(nameof(StandardLevelScenesTransitionSetupDataSO.InitAndSetupScenes))]
-#else
-    [HarmonyPatch(nameof(StandardLevelScenesTransitionSetupDataSO.Init))]
-#endif
     public class PStandardLevelScenesTransitionSetupDataSO : StandardLevelScenesTransitionSetupDataSO
     {
         /// <summary>
