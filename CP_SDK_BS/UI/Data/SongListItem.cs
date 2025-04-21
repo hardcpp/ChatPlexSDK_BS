@@ -138,6 +138,19 @@ namespace CP_SDK_BS.UI.Data
 
             return "";
         }
+        /// <summary>
+        /// Get level duration in seconds
+        /// </summary>
+        /// <returns></returns>
+        public int GetLevelDuration()
+        {
+            if (BeatSaver_Map != null && !BeatSaver_Map.Partial)
+                return BeatSaver_Map.metadata.duration;
+            else if (LocalLevel != null)
+                return (int)LocalLevel.songDuration;
+
+            return 0;
+        }
 
         ////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////
@@ -167,7 +180,7 @@ namespace CP_SDK_BS.UI.Data
                 var l_MapName       = LocalLevel != null ? LocalLevel.songName                      : BeatSaver_Map.name;
                 var l_MapAuthor     = LocalLevel != null ? LocalLevel.allMappers.FirstOrDefault()   : BeatSaver_Map.metadata.levelAuthorName;
                 var l_MapSongAuthor = LocalLevel != null ? LocalLevel.songAuthorName                : BeatSaver_Map.metadata.songAuthorName;
-                var l_Duration      = LocalLevel != null ? LocalLevel.songDuration                  : BeatSaver_Map.metadata.duration;
+                var l_Duration      = GetLevelDuration();
                 var l_BPM           = LocalLevel != null ? LocalLevel.beatsPerMinute                : BeatSaver_Map.metadata.bpm;
 #else
                 var l_HaveSong  = SongCore.Loader.GetLevelById(GetLevelID()) != null;
@@ -191,11 +204,11 @@ namespace CP_SDK_BS.UI.Data
                 }
 
                 var l_TitleBuilder = new StringBuilder(60);
-                //if (!string.IsNullOrWhiteSpace(TitlePrefix))
-                //    l_TitleBuilder.Append(TitlePrefix);
-                //
-                //if (BeatSaver_Map.ranked)
-                //    l_TitleBuilder.Append("<#F8E600><b>⭐</b>");
+                if (!string.IsNullOrWhiteSpace(TitlePrefix))
+                    l_TitleBuilder.Append(TitlePrefix);
+
+                if (BeatSaver_Map?.ranked ?? false)
+                    l_TitleBuilder.Append("<#F8E600><b>⭐</b>");
 
                 if (l_HaveAllScores)
                     l_TitleBuilder.Append("<#52F700>");
