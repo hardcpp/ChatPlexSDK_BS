@@ -411,7 +411,7 @@ namespace CP_SDK_BS.UI
             Cover           = p_Cover ?? Game.Levels.GetDefaultPackCover();
             Time            = p_BeatMap.songDuration;
             BPM             = p_BeatMap.beatsPerMinute;
-#if BEATSABER_1_35_0_OR_NEWER
+#if TRUE
             NJS             = (int)l_DifficultyBeatmap.noteJumpMovementSpeed;
             Offset          = l_DifficultyBeatmap.noteJumpStartBeatOffset;
             NPS             = ((float)l_DifficultyBeatmap.notesCount / (float)p_BeatMap.songDuration);
@@ -836,7 +836,7 @@ namespace CP_SDK_BS.UI
                     return;
                 }
 
-#if BEATSABER_1_35_0_OR_NEWER
+#if TRUE
                 var l_BeatmapKey        = l_Difficulties.ElementAt(p_Index);
                 var l_DifficultyBeatmap = m_LocalBeatMap.GetDifficultyBeatmapData(l_BeatmapKey.beatmapCharacteristic, l_BeatmapKey.difficulty);
 

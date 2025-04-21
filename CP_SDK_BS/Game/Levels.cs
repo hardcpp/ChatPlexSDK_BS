@@ -1,9 +1,8 @@
-﻿using System;
+﻿using CP_SDK.Extensions;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Security.Policy;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -116,7 +115,7 @@ namespace CP_SDK_BS.Game
                 return false;
 
             p_Hash = p_LevelID.Substring(13);
-            if (p_Hash.Length >= 40 && OnlyHexInString(p_Hash.Substring(0, 40)))
+            if (p_Hash.Length >= 40 && p_Hash.Substring(0, 40).IsOnlyHexSymbols())
                 p_Hash = p_Hash.Substring(0, 40).ToUpper();
 
             return true;
@@ -749,20 +748,6 @@ namespace CP_SDK_BS.Game
             }
 
             return l_Results;
-        }
-
-        ////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////
-
-        /// <summary>
-        /// Is hex only string
-        /// </summary>
-        /// <param name="p_Value">Value to test</param>
-        /// <returns></returns>
-        private static bool OnlyHexInString(string p_Value)
-        {
-            // For C-style hex notation (0xFF) you can use @"\A\b(0[xX])?[0-9a-fA-F]+\b\Z"
-            return System.Text.RegularExpressions.Regex.IsMatch(p_Value, @"\A\b[0-9a-fA-F]+\b\Z");
         }
     }
 }
