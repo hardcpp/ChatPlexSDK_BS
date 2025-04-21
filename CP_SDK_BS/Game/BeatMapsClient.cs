@@ -298,7 +298,12 @@ namespace CP_SDK_BS.Game
         /// </summary>
         /// <param name="p_Key">Key</param>
         public static void ClearCache(string p_Key)
-            => DeleteCacheFile(p_Key);
+        {
+            if (string.IsNullOrEmpty(p_Key))
+                return;
+
+            DeleteCacheFile(p_Key);
+        }
 
         ////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////
@@ -360,6 +365,9 @@ namespace CP_SDK_BS.Game
         /// <returns></returns>
         private static void DeleteCacheFile(string p_Key)
         {
+            if (string.IsNullOrEmpty(p_Key))
+                return;
+
             if (!m_CacheEnabled)
                 return;
 

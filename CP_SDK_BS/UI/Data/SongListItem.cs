@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -31,7 +30,7 @@ namespace CP_SDK_BS.UI.Data
 
         public string                       TitlePrefix         = string.Empty;
         public Game.BeatMaps.MapDetail      BeatSaver_Map       = null;
-        public BeatmapLevel                 LocalLevel          = null;
+        public BeatmapLevel                 BeatmapLevel        = null;
         public Sprite                       Cover               = null;
         public string                       Tooltip             = string.Empty;
         public SongListController           SongListController  = null;
@@ -39,7 +38,7 @@ namespace CP_SDK_BS.UI.Data
         ////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////
 
-        public bool Invalid => (LocalLevel == null && BeatSaver_Map == null);
+        public bool Invalid => (BeatmapLevel == null && BeatSaver_Map == null);
 
         ////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////
@@ -87,10 +86,10 @@ namespace CP_SDK_BS.UI.Data
             if (!m_SongPreviewPlayer)
                 m_SongPreviewPlayer = UnityEngine.Resources.FindObjectsOfTypeAll<SongPreviewPlayer>().FirstOrDefault();
 
-            if (LocalLevel == null && BeatSaver_Map != null && !BeatSaver_Map.Partial)
+            if (BeatmapLevel == null && BeatSaver_Map != null && !BeatSaver_Map.Partial)
             {
                 if (Game.Levels.TryGetBeatmapLevelForHash(GetLevelHash(), out var l_LocalLevel))
-                    LocalLevel = l_LocalLevel;
+                    BeatmapLevel = l_LocalLevel;
             }
 
             m_WasInit = true;
@@ -110,8 +109,8 @@ namespace CP_SDK_BS.UI.Data
                 && BeatSaver_Map.SelectMapVersion().hash != null
                 && Game.Levels.TryGetLevelIDFromHash(BeatSaver_Map.SelectMapVersion().hash, out var l_LevelID))
                 return l_LevelID;
-            else if (LocalLevel != null)
-                return LocalLevel.levelID;
+            else if (BeatmapLevel != null)
+                return BeatmapLevel.levelID;
 
             return "";
         }
@@ -123,21 +122,77 @@ namespace CP_SDK_BS.UI.Data
         {
             if (BeatSaver_Map != null && BeatSaver_Map.SelectMapVersion() != null && BeatSaver_Map.SelectMapVersion().hash != null)
                 return BeatSaver_Map.SelectMapVersion().hash.ToUpper();
-            else if (LocalLevel != null && Game.Levels.LevelID_IsCustom(LocalLevel.levelID) && Game.Levels.TryGetHashFromLevelID(LocalLevel.levelID, out var l_Hash))
+            else if (BeatmapLevel != null && Game.Levels.LevelID_IsCustom(BeatmapLevel.levelID) && Game.Levels.TryGetHashFromLevelID(BeatmapLevel.levelID, out var l_Hash))
                 return l_Hash;
 
             return "";
         }
         /// <summary>
-        /// Get level duration in seconds
+        /// Get level author name
         /// </summary>
         /// <returns></returns>
-        public int GetLevelDuration()
+        public string GetLevelAuthorName()
+        {
+            if (BeatSaver_Map != null && BeatSaver_Map.SelectMapVersion() != null && BeatSaver_Map.SelectMapVersion().hash != null)
+                return BeatSaver_Map.metadata.levelAuthorName;
+            else if (BeatmapLevel != null)
+                return string.Join(", ", BeatmapLevel.allMappers);
+
+            return "<unk>";
+        }
+        /// <summary>
+        /// Get level uploader
+        /// </summary>
+        /// <returns></returns>
+        public string GetLevelUploaderName()
+        {
+            if (BeatSaver_Map != null && BeatSaver_Map.SelectMapVersion() != null && BeatSaver_Map.SelectMapVersion().hash != null)
+                return BeatSaver_Map.uploader.name;
+            else if (BeatmapLevel != null)
+                return BeatmapLevel.allMappers.FirstOrDefault();
+
+            return "<unk>";
+        }
+
+        ////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Get song name
+        /// </summary>
+        /// <returns></returns>
+        public string GetSongName()
+        {
+            if (BeatSaver_Map != null && BeatSaver_Map.SelectMapVersion() != null && BeatSaver_Map.SelectMapVersion().hash != null)
+                return BeatSaver_Map.metadata.songName;
+            else if (BeatmapLevel != null )
+                return BeatmapLevel.songName;
+
+            return "<unk>";
+        }
+        /// <summary>
+        /// Get song author name
+        /// </summary>
+        /// <returns></returns>
+        public string GetSongAuthorName()
+        {
+            if (BeatSaver_Map != null && BeatSaver_Map.SelectMapVersion() != null && BeatSaver_Map.SelectMapVersion().hash != null)
+                return BeatSaver_Map.metadata.songAuthorName;
+            else if (BeatmapLevel != null)
+                return BeatmapLevel.songAuthorName;
+
+            return "<unk>";
+        }
+        /// <summary>
+        /// Get song duration in seconds
+        /// </summary>
+        /// <returns></returns>
+        public int GetSongDuration()
         {
             if (BeatSaver_Map != null && !BeatSaver_Map.Partial)
                 return BeatSaver_Map.metadata.duration;
-            else if (LocalLevel != null)
-                return (int)LocalLevel.songDuration;
+            else if (BeatmapLevel != null)
+                return (int)BeatmapLevel.songDuration;
 
             return 0;
         }
@@ -161,16 +216,13 @@ namespace CP_SDK_BS.UI.Data
             var l_BPMText       = "";
             var l_DurationText  = "";
 
-            if ((BeatSaver_Map != null && !BeatSaver_Map.Partial) || LocalLevel != null)
+            if ((BeatSaver_Map != null && !BeatSaver_Map.Partial) || BeatmapLevel != null)
             {
                 var l_HaveSong  = Game.Levels.TryGetBeatmapLevelForLevelID(GetLevelID(), out _);
                 var l_Scores    = Game.Levels.GetScoresByLevelID(GetLevelID(), out var l_HaveAnyScore, out var l_HaveAllScores);
 
-                var l_MapName       = LocalLevel != null ? LocalLevel.songName                      : BeatSaver_Map.name;
-                var l_MapAuthor     = LocalLevel != null ? LocalLevel.allMappers.FirstOrDefault()   : BeatSaver_Map.metadata.levelAuthorName;
-                var l_MapSongAuthor = LocalLevel != null ? LocalLevel.songAuthorName                : BeatSaver_Map.metadata.songAuthorName;
-                var l_Duration      = GetLevelDuration();
-                var l_BPM           = LocalLevel != null ? LocalLevel.beatsPerMinute                : BeatSaver_Map.metadata.bpm;
+                var l_Duration      = GetSongDuration();
+                var l_BPM           = BeatmapLevel != null ? BeatmapLevel.beatsPerMinute                : BeatSaver_Map.metadata.bpm;
 
                 if (l_Scores.Count != 0)
                 {
@@ -198,21 +250,19 @@ namespace CP_SDK_BS.UI.Data
                 else
                     l_TitleBuilder.Append("<#FFFFFF>");
 
-                l_TitleBuilder.Append(l_MapName);
+                l_TitleBuilder.Append(GetSongName());
 
                 l_Title         = l_TitleBuilder.ToString();
-                l_SubTitle      = $"{l_MapSongAuthor} <#FFFFFF>[<size=85%>{l_MapAuthor}]";
+                l_SubTitle      = $"{GetSongAuthorName()} <#FFFFFF>[<size=85%>{GetLevelAuthorName()}]";
                 l_BPMText       = ((int)l_BPM).ToString();
                 l_DurationText  = l_Duration >= 0.0 ? $"{Math.Floor((double)l_Duration / 60):N0}:{Math.Floor((double)l_Duration % 60):00}" : "--";
-
-                LoadLevelCover();
             }
             else if (BeatSaver_Map != null && BeatSaver_Map.Partial)
                 l_Title = "Loading from BeatSaver...";
             else
             {
                 l_Title     = "<#FF0000>Invalid song";
-                l_SubTitle  = LocalLevel != null && Game.Levels.TryGetHashFromLevelID(LocalLevel.levelID, out var l_Hash) ? l_Hash : "";
+                l_SubTitle  = BeatmapLevel != null && Game.Levels.TryGetHashFromLevelID(BeatmapLevel.levelID, out var l_Hash) ? l_Hash : "";
             }
 
             l_SongListCell.Cover.SetSprite(Cover ?? m_DefaultCover);
@@ -236,6 +286,9 @@ namespace CP_SDK_BS.UI.Data
                 l_SongListCell.BPM.gameObject.SetActive(false);
 
             l_SongListCell.Tooltip = l_Tooltip;
+
+            if (Cover == null || !Cover)
+                LoadLevelCover();
         }
 
         ////////////////////////////////////////////////////////////////////////////
@@ -305,8 +358,13 @@ namespace CP_SDK_BS.UI.Data
         {
             if (!Cover && m_CoverCache.TryGetValue(GetLevelHash(), out var l_Cover))
             {
-                CoverLoaded(l_Cover);
-                return;
+                if (l_Cover)
+                {
+                    CoverLoaded(l_Cover);
+                    return;
+                }
+
+                m_CoverCache.Remove(GetLevelHash());
             }
 
             if (Game.Levels.TryGetBeatmapLevelForLevelID(GetLevelID(), out var l_LocalSong))
@@ -457,7 +515,7 @@ namespace CP_SDK_BS.UI.Data
                     m_AudioClipCache.Add(GetLevelHash(), l_AudioClip);
 
                 if (m_SongPreviewPlayer && m_SongPreviewPlayer.activeAudioClip != l_AudioClip)
-                    m_SongPreviewPlayer.CrossfadeTo(l_AudioClip, p_PreviewAudioVolume, LocalLevel.previewStartTime, LocalLevel.previewDuration, () => { });
+                    m_SongPreviewPlayer.CrossfadeTo(l_AudioClip, p_PreviewAudioVolume, BeatmapLevel.previewStartTime, BeatmapLevel.previewDuration, () => { });
             }
             catch (Exception)
             {
