@@ -294,7 +294,9 @@ namespace ChatPlexSDK_BS
             if (m_HMUIScreenSystem == null || !m_HMUIScreenSystem)
             {
                 m_HMUIDeactivatedScreens.Clear();
-                m_HMUIScreenSystem = Resources.FindObjectsOfTypeAll<HMUI.ScreenSystem>().FirstOrDefault();
+                m_HMUIScreenSystem = Resources.FindObjectsOfTypeAll<HMUI.ScreenSystem>().FirstOrDefault((x) => {
+                    return x && x.isActiveAndEnabled && x.GetComponent<HMUI.HierarchyManager>() && x.transform.parent?.name == "UI";
+                });
             }
 
             if (!m_HMUIScreenSystem)
