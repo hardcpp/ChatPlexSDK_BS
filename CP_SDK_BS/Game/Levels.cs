@@ -22,6 +22,7 @@ namespace CP_SDK_BS.Game
         private static CancellationTokenSource              m_GetLevelEntitlementStatusTokenSource;
         private static MenuTransitionsHelper                m_MenuTransitionsHelper;
         private static SimpleLevelStarter                   m_SimpleLevelStarter;
+        private static PlayerDataModel                      m_PlayerDataModel;
 
         ////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////
@@ -715,10 +716,20 @@ namespace CP_SDK_BS.Game
         /// <returns>Scores</returns>
         public static Dictionary<BeatmapCharacteristicSO, List<(BeatmapDifficulty, int)>> GetScoresByLevelID(string p_LevelID, out bool p_HaveAnyScore, out bool p_HaveAllScores)
         {
-            var l_Results = new Dictionary<BeatmapCharacteristicSO, List<(BeatmapDifficulty, int)>>();
-
             p_HaveAnyScore  = false;
             p_HaveAllScores = true;
+
+            var l_Results = new Dictionary<BeatmapCharacteristicSO, List<(BeatmapDifficulty, int)>>();
+            if (m_PlayerDataModel == null || !m_PlayerDataModel)
+            {
+                m_PlayerDataModel = Resources.FindObjectsOfTypeAll<PlayerDataModel>().FirstOrDefault();
+
+                if (!m_PlayerDataModel)
+                {
+                    p_HaveAllScores = false;
+                    return l_Results;
+                }
+            }
 
             var l_LevelID = SanitizeLevelID(p_LevelID);
             if (!TryGetBeatmapLevelForLevelID(l_LevelID, out var l_BeatmapLevel))
@@ -727,8 +738,7 @@ namespace CP_SDK_BS.Game
                 return l_Results;
             }
 
-            var l_PlayerDataModel   = Resources.FindObjectsOfTypeAll<PlayerDataModel>().FirstOrDefault();
-            var l_PlayerData        = l_PlayerDataModel?._playerData;
+            var l_PlayerData        = m_PlayerDataModel?._playerData;
             var l_LevelStatsData    = l_PlayerData?.levelsStatsData;
             foreach (var l_BeatmapKey in l_BeatmapLevel.GetBeatmapKeys())
             {
