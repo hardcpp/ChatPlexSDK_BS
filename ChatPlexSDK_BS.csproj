@@ -282,6 +282,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CP_SDK\ChatPlexSDK.cs" />
+    <Compile Include="CP_SDK\ChatPlexService.cs" />
     <Compile Include="CP_SDK\Chat\Interfaces\EBadgeType.cs" />
     <Compile Include="CP_SDK\Chat\Interfaces\IChatServiceResourceProvider.cs" />
     <Compile Include="CP_SDK\Chat\Models\Twitch\TwitchTempChannel.cs" />
