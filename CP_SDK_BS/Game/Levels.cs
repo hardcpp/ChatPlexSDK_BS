@@ -360,6 +360,8 @@ namespace CP_SDK_BS.Game
                     p_BeatmapLevel = l_Result;
                     return true;
                 }
+
+                CP_SDK.ChatPlexSDK.Logger.Error("[CP_SDK_BS.Game][Level.TryGetBeatmapLevelForLevelID] GetBeatmapLevel failed");
             }
             else
                 CP_SDK.ChatPlexSDK.Logger.Error("[CP_SDK_BS.Game][Level.TryGetBeatmapLevelForLevelID] Invalid BeatmapLevelsModel");
