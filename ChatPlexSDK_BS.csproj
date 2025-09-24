@@ -470,6 +470,7 @@
     <Compile Include="CP_SDK\Network\websocket-sharp\WebSocketFrame.cs" />
     <Compile Include="CP_SDK\Network\websocket-sharp\WebSocketState.cs" />
     <Compile Include="CP_SDK\Network\WebSocketClient.cs" />
+    <Compile Include="CP_SDK\OBS\Models\SceneItemFilter.cs" />
     <Compile Include="CP_SDK\OBS\Models\Transition.cs" />
     <Compile Include="CP_SDK\OBS\OBSModSettings.cs" />
     <Compile Include="CP_SDK\OBS\Service_PayloadHandlers.cs" />
