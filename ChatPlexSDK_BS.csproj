@@ -295,6 +295,7 @@
     <Compile Include="CP_SDK\Chat\Services\Twitch\TwitchEventSub.cs" />
     <Compile Include="CP_SDK\Chat\Utilities\7TVUtils.cs" />
     <Compile Include="CP_SDK\Config\JsonConverters\QuaternionConverter.cs" />
+    <Compile Include="CP_SDK\ChatPlexServiceConfig.cs" />
     <Compile Include="CP_SDK\CPConfig.cs" />
     <Compile Include="CP_SDK\Extensions\StringU.cs" />
     <Compile Include="CP_SDK\Logging\ConsoleLogger.cs" />
@@ -588,6 +589,7 @@
     <Compile Include="CP_SDK\XUI\XUITextInput.cs" />
     <Compile Include="CP_SDK\XUI\XUITextSegmentedControl.cs" />
     <Compile Include="CP_SDK\XUI\XUIVVList.cs" />
+    <Compile Include="CP_SDK_BS\Game\BetterSongSearch.cs" />
     <Compile Include="CP_SDK_BS\Game\PlayerAvatarPicture.cs" />
     <Compile Include="CP_SDK_BS\UI\CP_SDK_UI_IViewControllerBridge.cs" />
     <Compile Include="CP_SDK_BS\UI\Data\SongListCell.cs" />
