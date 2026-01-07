@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using static PlayerSaveData;
 
 namespace CP_SDK_BS.Game
 {
@@ -582,58 +583,37 @@ namespace CP_SDK_BS.Game
                     Scoring.BeatLeader_ManualWarmUpSubmission();
 
                     var l_BeatmapKey = p_Level.GetBeatmapKeys().FirstOrDefault(x => x.beatmapCharacteristic == p_Characteristic && x.difficulty == p_Difficulty);
-
-                    /// Temp beatleader fix
-                    m_MenuTransitionsHelper._standardLevelScenesTransitionSetupData.Init(
-                        "Solo",
-                        in l_BeatmapKey,
-                        p_Level,
-                        p_OverrideEnvironmentSettings,
-                        p_ColorScheme,
-                        false,/*playerOverrideLightshowColors*/
-                        null,
-                        p_GameplayModifiers ?? new GameplayModifiers(),
-                        p_PlayerSettings ?? new PlayerSpecificSettings(),
-                        null,
-                        m_SimpleLevelStarter._environmentsListModel,
-                        m_MenuTransitionsHelper._audioClipAsyncLoader,
-                        m_MenuTransitionsHelper._beatmapDataLoader,
-                        m_MenuTransitionsHelper._settingsManager,
-                        p_MenuButtonText,
-                        m_MenuTransitionsHelper._beatmapLevelsModel,
-                        m_MenuTransitionsHelper._beatmapLevelsEntitlementModel,
-                        false,
-                        false,
-                        null
+                    var gameplayAdditionInfo = new GameplayAdditionalInformation(
+                        backButtonText: p_MenuButtonText
                     );
+
+                    m_MenuTransitionsHelper._standardLevelScenesTransitionSetupData.Init(
+                        /* string */                          gameMode:                      "Solo",
+                        /* in BeatmapKey */                   beatmapKey:                    in l_BeatmapKey,
+                        /* BeatmapLevel */                    beatmapLevel:                  p_Level,
+                        /* OverrideEnvironmentSettings ? */   overrideEnvironmentSettings:   p_OverrideEnvironmentSettings,
+                        /* ColorScheme ? */                   playerOverrideColorScheme:     p_ColorScheme,
+                        /* bool */                            playerOverrideLightshowColors: false,
+                        /* GameplayModifiers */               gameplayModifiers:             p_GameplayModifiers ?? new GameplayModifiers(),
+                        /* PlayerSpecificSettings */          playerSpecificSettings:        p_PlayerSettings ?? new PlayerSpecificSettings(),
+                        /* PracticeSettings ? */              practiceSettings:              null,
+                        /* EnvironmentsListModel */           environmentsListModel:         m_SimpleLevelStarter._environmentsListModel,
+                        /* AudioClipAsyncLoader */            audioClipAsyncLoader:          m_MenuTransitionsHelper._audioClipAsyncLoader,
+                        /* SettingsManager */                 settingsManager:               m_MenuTransitionsHelper._settingsManager,
+                        /* GameplayAdditionalInformation */   gameplayAdditionalInformation: gameplayAdditionInfo,
+                        /* BeatmapDataLoader */               beatmapDataLoader:             m_MenuTransitionsHelper._beatmapDataLoader,
+                        /* BeatmapLevelsEntitlementModel? */  beatmapLevelsEntitlementModel: m_MenuTransitionsHelper._beatmapLevelsEntitlementModel,
+                        /* BeatmapLevelsModel? */             beatmapLevelsModel:            p_BeatmapLevelData == null ? m_MenuTransitionsHelper._beatmapLevelsModel : null,
+                        /* IBeatmapLevelData? */              beatmapLevelData:              p_BeatmapLevelData,
+                        /* RecordingToolManager.SetupData? */ recordingToolData:             null
+                    );
+
                     m_MenuTransitionsHelper._standardLevelScenesTransitionSetupData.gameplayCoreSceneSetupData.beatmapLevelData = p_BeatmapLevelData;
                     m_MenuTransitionsHelper._standardLevelFinishedCallback = p_SongFinishedCallback;
                     m_MenuTransitionsHelper._standardLevelRestartedCallback = null;
                     m_MenuTransitionsHelper._standardLevelScenesTransitionSetupData.didFinishEvent -= m_MenuTransitionsHelper.HandleMainGameSceneDidFinish;
                     m_MenuTransitionsHelper._standardLevelScenesTransitionSetupData.didFinishEvent += m_MenuTransitionsHelper.HandleMainGameSceneDidFinish;
                     m_MenuTransitionsHelper._gameScenesManager.PushScenes(m_MenuTransitionsHelper._standardLevelScenesTransitionSetupData, 0.7f, null, null);
-
-                    //m_MenuTransitionsHelper.StartStandardLevel(
-                    //    /* string */                                                                    gameMode:                       "Solo",
-                    //    /* in BeatmapKey */                                                             beatmapKey:                     l_BeatmapKey,
-                    //    /* BeatmapLevel */                                                              beatmapLevel:                   p_Level,
-                    //    /* IBeatmapLevelData */                                                         beatmapLevelData:               p_BeatmapLevelData,
-                    //    /* OverrideEnvironmentSettings */                                               overrideEnvironmentSettings:    p_OverrideEnvironmentSettings,
-                    //    /* ColorScheme */                                                               overrideColorScheme:            p_ColorScheme,
-                    //    /* ColorScheme */                                                               beatmapOverrideColorScheme:     null,
-                    //    /* GameplayModifiers */                                                         gameplayModifiers:              p_GameplayModifiers ?? new GameplayModifiers(),
-                    //    /* PlayerSpecificSettings */                                                    playerSpecificSettings:         p_PlayerSettings    ?? new PlayerSpecificSettings(),
-                    //    /* PracticeSettings */                                                          practiceSettings:               null,
-                    //    /* EnvironmentsListModel */                                                     environmentsListModel:          m_SimpleLevelStarter._environmentsListModel,
-                    //    /* string */                                                                    backButtonText:                 p_MenuButtonText,
-                    //    /* bool */                                                                      useTestNoteCutSoundEffects:     false,
-                    //    /* bool */                                                                      startPaused:                    false,
-                    //    /* Action */                                                                    beforeSceneSwitchCallback:      null,
-                    //    /* Action<DiContainer> */                                                       afterSceneSwitchCallback:       null,
-                    //    /* Action<StandardLevelScenesTransitionSetupDataSO, LevelCompletionResults>*/   levelFinishedCallback:          p_SongFinishedCallback,
-                    //    /* Action<LevelScenesTransitionSetupDataSO, LevelCompletionResults>*/           levelRestartedCallback:         null,
-                    //    /* RecordingToolManager.SetupData?*/                                            recordingToolData:              null
-                    //);
                 }
                 catch (Exception l_Exception)
                 {

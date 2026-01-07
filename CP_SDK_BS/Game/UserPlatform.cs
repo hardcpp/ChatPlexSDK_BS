@@ -1,4 +1,8 @@
-﻿using System.Threading;
+﻿using CP_SDK;
+using CP_SDK.Unity;
+using CP_SDK_WebSocketSharp;
+using System;
+using System.Threading;
 using UnityEngine;
 
 namespace CP_SDK_BS.Game
@@ -29,7 +33,20 @@ namespace CP_SDK_BS.Game
             if (m_UserID != null)
                 return m_UserID;
 
-            FetchPlatformInfos();
+            if (MTMainThreadInvoker.IsMainThread())
+                FetchPlatformInfos();
+            else
+            {
+                var isReady = false;
+                MTMainThreadInvoker.Enqueue(() =>
+                {
+                    FetchPlatformInfos();
+                    isReady = true;
+                });
+
+                while (!isReady)
+                    Thread.Sleep(TimeSpan.FromMilliseconds(1));
+            }
 
             return m_UserID;
         }
@@ -42,7 +59,20 @@ namespace CP_SDK_BS.Game
             if (m_UserName != null)
                 return m_UserName;
 
-            FetchPlatformInfos();
+            if (MTMainThreadInvoker.IsMainThread())
+                FetchPlatformInfos();
+            else
+            {
+                var isReady = false;
+                MTMainThreadInvoker.Enqueue(() =>
+                {
+                    FetchPlatformInfos();
+                    isReady = true;
+                });
+
+                while (!isReady)
+                    Thread.Sleep(TimeSpan.FromMilliseconds(1));
+            }
 
             return m_UserName;
         }
@@ -61,18 +91,16 @@ namespace CP_SDK_BS.Game
 
                 foreach (var l_Current in l_PlatformLeaderboardsModels)
                 {
-                    var l_PlatformUserModel = l_Current._platformUserModel;
+                    var l_PlatformUserModel = l_Current._platform;
                     if (l_PlatformUserModel == null)
                         continue;
 
-                    var l_Task = l_PlatformUserModel.GetUserInfo(CancellationToken.None);
-                    l_Task.Wait();
+                    l_Current.Initialize();
 
-                    var l_PlayerID = l_Task.Result.platformUserId;
-                    if (!string.IsNullOrEmpty(l_PlayerID))
+                    if (l_Current.playerId != 0)
                     {
-                        m_UserID    = l_PlayerID;
-                        m_UserName  = l_Task.Result.userName;
+                        m_UserID = l_Current.playerId.ToString();
+                        m_UserName = l_Current._platform.user.displayName;
                         return;
                     }
                 }

@@ -61,7 +61,14 @@ namespace CP_SDK_BS.Game.Patches
             if (m_LevelData == null)
                 return;
 
-            Logic.FireLevelEnded(new LevelCompletionData() { Type = LevelType.Multiplayer, Data = m_LevelData.Data, Results = p_MultiplayerResultsData?.localPlayerResultData?.multiplayerLevelCompletionResults?.levelCompletionResults ?? null });
+            Logic.FireLevelEnded(
+                new LevelCompletionData()
+                {
+                    Type    = LevelType.Multiplayer,
+                    Data    = m_LevelData.Data,
+                    Results = p_MultiplayerResultsData?.localPlayerResultData?.multiplayerLevelCompletionResults?.levelCompletionResults ?? null
+                }
+            );
             m_LevelData = null;
         }
     }

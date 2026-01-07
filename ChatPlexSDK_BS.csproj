@@ -86,6 +86,11 @@
     </Reference>
     <Reference Include="BeatSaber.GameSettings">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatSaber.GameSettings.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="BeatSaber.Multiplayer.Core">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatSaber.Multiplayer.Core.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="BeatSaber.ViewSystem" Publicize="true">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatSaber.ViewSystem.dll</HintPath>
@@ -149,6 +154,10 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(BeatSaberDir)\Libs\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="OculusStudios.Platform.Core">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\OculusStudios.Platform.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="PlatformUserModel">
@@ -806,6 +815,7 @@
     <EmbeddedResource Include="CP_SDK\_Resources\ChatPlexLogoLoading.webp" />
     <EmbeddedResource Include="CP_SDK\_Resources\CP_SDK.BuiltIn.u2021.bundle" />
     <EmbeddedResource Include="CP_SDK\_Resources\CP_SDK.BuiltIn.u2022.bundle" />
+    <EmbeddedResource Include="CP_SDK\_Resources\CP_SDK.BuiltIn.u6000.bundle" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CP_SDK_BS\UI\Resources\NJS.png" />

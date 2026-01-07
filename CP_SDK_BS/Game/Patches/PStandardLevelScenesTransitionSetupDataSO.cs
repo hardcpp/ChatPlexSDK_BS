@@ -6,7 +6,7 @@ namespace CP_SDK_BS.Game.Patches
     /// Level data finder
     /// </summary>
     [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO))]
-    [HarmonyPatch(nameof(StandardLevelScenesTransitionSetupDataSO.InitAndSetupScenes))]
+    [HarmonyPatch(nameof(StandardLevelScenesTransitionSetupDataSO.Init))]
     public class PStandardLevelScenesTransitionSetupDataSO : StandardLevelScenesTransitionSetupDataSO
     {
         /// <summary>
