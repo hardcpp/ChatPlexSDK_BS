@@ -88,7 +88,7 @@ namespace CP_SDK_BS.UI.Data
 
             if (BeatmapLevel == null && BeatSaver_Map != null && !BeatSaver_Map.Partial)
             {
-                if (Game.Levels.TryGetBeatmapLevelForHash(GetLevelHash(), out var l_LocalLevel))
+                if (Game.Levels.TryGetBeatmapLevelForHash(GetLevelHash(), out var l_LocalLevel, silentFail: true))
                     BeatmapLevel = l_LocalLevel;
             }
 

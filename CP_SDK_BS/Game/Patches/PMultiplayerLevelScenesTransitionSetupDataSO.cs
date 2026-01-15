@@ -6,8 +6,8 @@ namespace CP_SDK_BS.Game.Patches
     /// <summary>
     /// Level data finder
     /// </summary>
-    [HarmonyPatch(typeof(MultiplayerLevelScenesTransitionSetupDataSO))]
-    [HarmonyPatch(nameof(MultiplayerLevelScenesTransitionSetupDataSO.Init))]
+    [HarmonyPatch(typeof(MenuTransitionsHelper))]
+    [HarmonyPatch(nameof(MenuTransitionsHelper.StartMultiplayerLevel))]
     public class PMultiplayerLevelScenesTransitionSetupDataSO : MultiplayerLevelScenesTransitionSetupDataSO
     {
         /// <summary>
@@ -21,20 +21,20 @@ namespace CP_SDK_BS.Game.Patches
         /// <summary>
         /// Postfix
         /// </summary>
-        internal static void Postfix(ref MultiplayerLevelScenesTransitionSetupDataSO __instance)
+        internal static void Postfix(ref MenuTransitionsHelper __instance)
         {
             var l_LevelData = new LevelData()
             {
                 Type = LevelType.Multiplayer,
-                Data = __instance.gameplayCoreSceneSetupData
+                Data = __instance.multiplayerLevelScenesTransitionSetupData.gameplayCoreSceneSetupData
             };
 
             Logic.FireLevelStarted(l_LevelData);
 
             m_LevelData = l_LevelData;
 
-            __instance.didFinishEvent -= OnDidFinishEvent;
-            __instance.didFinishEvent += OnDidFinishEvent;
+            __instance.multiplayerLevelScenesTransitionSetupData.didFinishEvent -= OnDidFinishEvent;
+            __instance.multiplayerLevelScenesTransitionSetupData.didFinishEvent += OnDidFinishEvent;
         }
 
         ////////////////////////////////////////////////////////////////////////////

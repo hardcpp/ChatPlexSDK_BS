@@ -15,7 +15,7 @@ namespace ChatPlexSDK_BS
     /// <summary>
     /// Main plugin class
     /// </summary>
-    [Plugin(RuntimeOptions.DynamicInit)]
+    [Plugin(RuntimeOptions.SingleStartInit)]
     public class Plugin
     {
         internal static Hive.Versioning.Version Version     => IPA.Loader.PluginManager.GetPluginFromId("ChatPlexSDK_BS").HVersion;
@@ -75,11 +75,9 @@ namespace ChatPlexSDK_BS
         ////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////
 
-        /// <summary>
-        /// On ChatPlexSDK_BS enable
-        /// </summary>
-        [OnEnable]
-        public void OnEnable()
+
+        [OnStart]
+        public void OnApplicationStart()
         {
             CP_SDK.ChatPlexSDK.OnUnityReady();
 
@@ -90,8 +88,7 @@ namespace ChatPlexSDK_BS
                 /// Setup harmony
                 m_Harmony = new Harmony(HarmonyID);
                 m_Harmony.PatchAll(Assembly.GetExecutingAssembly());
-
-
+                
                 CP_SDK.ChatPlexSDK.Logger.Debug("Init helpers.");
                 CP_SDK_BS.Game.BeatMapsClient.Init();
                 CP_SDK_BS.Game.Logic.Init();
@@ -108,21 +105,29 @@ namespace ChatPlexSDK_BS
                     CP_SDK_BS.Game.Logic.OnMenuSceneLoaded += Logic_OnMenuSceneLoaded;
                 }
             }
-            catch (Exception p_Exception)
+            catch (Exception exception)
             {
                 CP_SDK.ChatPlexSDK.Logger.Error("[ChatPlexSDK_BS][Plugin.OnEnable] Error:");
-                CP_SDK.ChatPlexSDK.Logger.Error(p_Exception);
+                CP_SDK.ChatPlexSDK.Logger.Error(exception);
             }
         }
-        /// <summary>
-        /// On ChatPlexSDK_BS disable
-        /// </summary>
-        [OnDisable]
-        public void OnDisable()
+
+        [OnExit]
+        public void OnApplicationQuit() 
         {
-            CP_SDK.ChatPlexSDK.StopModules();
-            CP_SDK.ChatPlexSDK.OnUnityExit();
-            CP_SDK.ChatPlexSDK.OnAssemblyExit();
+            try
+            {
+                CP_SDK.ChatPlexSDK.StopModules();
+                CP_SDK.ChatPlexSDK.OnUnityExit();
+                CP_SDK.ChatPlexSDK.OnAssemblyExit();
+            
+                m_Harmony.UnpatchSelf();
+            }
+            catch (Exception exception)
+            {
+                CP_SDK.ChatPlexSDK.Logger.Error("[ChatPlexSDK_BS][Plugin.OnEnable] Error:");
+                CP_SDK.ChatPlexSDK.Logger.Error(exception);
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////

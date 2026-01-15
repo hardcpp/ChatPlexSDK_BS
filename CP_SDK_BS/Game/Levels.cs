@@ -334,8 +334,9 @@ namespace CP_SDK_BS.Game
         /// </summary>
         /// <param name="p_LevelID">ID of the level</param>
         /// <param name="p_BeatmapLevel">OUT Found BeatmapLevel or null</param>
+        /// <param name="silentFail">Should not log map not found error?</param>
         /// <returns>true or false </returns>
-        public static bool TryGetBeatmapLevelForLevelID(string p_LevelID, out BeatmapLevel p_BeatmapLevel)
+        public static bool TryGetBeatmapLevelForLevelID(string p_LevelID, out BeatmapLevel p_BeatmapLevel, bool silentFail = false)
         {
             p_BeatmapLevel = null;
 
@@ -362,7 +363,8 @@ namespace CP_SDK_BS.Game
                     return true;
                 }
 
-                CP_SDK.ChatPlexSDK.Logger.Error("[CP_SDK_BS.Game][Level.TryGetBeatmapLevelForLevelID] GetBeatmapLevel failed");
+                if (!silentFail)
+                    CP_SDK.ChatPlexSDK.Logger.Error("[CP_SDK_BS.Game][Level.TryGetBeatmapLevelForLevelID] GetBeatmapLevel failed");
             }
             else
                 CP_SDK.ChatPlexSDK.Logger.Error("[CP_SDK_BS.Game][Level.TryGetBeatmapLevelForLevelID] Invalid BeatmapLevelsModel");
@@ -374,14 +376,15 @@ namespace CP_SDK_BS.Game
         /// </summary>
         /// <param name="p_Hash">Hash of the level</param>
         /// <param name="p_BeatmapLevel">OUT Found BeatmapLevel or null</param>
+        /// <param name="silentFail">Should not log map not found error?</param>
         /// <returns>true or false </returns>
-        public static bool TryGetBeatmapLevelForHash(string p_Hash, out BeatmapLevel p_BeatmapLevel)
+        public static bool TryGetBeatmapLevelForHash(string p_Hash, out BeatmapLevel p_BeatmapLevel, bool silentFail = false)
         {
             p_BeatmapLevel = null;
             if (!TryGetLevelIDFromHash(p_Hash, out var l_LevelID))
                 return false;
 
-            return TryGetBeatmapLevelForLevelID(l_LevelID, out p_BeatmapLevel);
+            return TryGetBeatmapLevelForLevelID(l_LevelID, out p_BeatmapLevel, silentFail);
         }
 
         ////////////////////////////////////////////////////////////////////////////
