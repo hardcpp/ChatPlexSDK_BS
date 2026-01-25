@@ -1,12 +1,13 @@
 ﻿using HarmonyLib;
+using IPA.Utilities;
 
 namespace CP_SDK_BS.Game.Patches
 {
     /// <summary>
     /// Level data finder
     /// </summary>
-    [HarmonyPatch(typeof(MenuTransitionsHelper))]
-    [HarmonyPatch(nameof(MenuTransitionsHelper.StartStandardLevel))]
+    [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO))]
+    [HarmonyPatch(nameof(StandardLevelScenesTransitionSetupDataSO.InitAndSetupScenes))]
     public class PStandardLevelScenesTransitionSetupDataSO : StandardLevelScenesTransitionSetupDataSO
     {
         /// <summary>
@@ -20,18 +21,18 @@ namespace CP_SDK_BS.Game.Patches
         /// <summary>
         /// Postfix
         /// </summary>
-        internal static void Postfix(ref MenuTransitionsHelper __instance)
+        internal static void Postfix(ref StandardLevelScenesTransitionSetupDataSO __instance)
         {
             m_LevelData = new LevelData()
             {
                 Type = LevelType.Solo,
-                Data = __instance.standardLevelScenesTransitionSetupData.gameplayCoreSceneSetupData
+                Data = __instance.gameplayCoreSceneSetupData
             };
 
             Logic.FireLevelStarted(m_LevelData);
 
-            __instance.standardLevelScenesTransitionSetupData.didFinishEvent -= OnDidFinishEvent;
-            __instance.standardLevelScenesTransitionSetupData.didFinishEvent += OnDidFinishEvent;
+            __instance.didFinishEvent -= OnDidFinishEvent;
+            __instance.didFinishEvent += OnDidFinishEvent;
         }
 
         ////////////////////////////////////////////////////////////////////////////

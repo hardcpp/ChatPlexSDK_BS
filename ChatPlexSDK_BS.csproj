@@ -269,7 +269,6 @@
         <EmbeddedResource Include="CP_SDK\_Resources\ChatPlexLogoLoading.webp"/>
         <EmbeddedResource Include="CP_SDK\_Resources\CP_SDK.BuiltIn.u2021.bundle"/>
         <EmbeddedResource Include="CP_SDK\_Resources\CP_SDK.BuiltIn.u2022.bundle"/>
-        <EmbeddedResource Include="CP_SDK\_Resources\CP_SDK.BuiltIn.u6000.bundle"/>
         <EmbeddedResource Include="CP_SDK_BS\UI\Resources\NJS.png"/>
         <EmbeddedResource Include="CP_SDK_BS\UI\Resources\Offset.png"/>
         <EmbeddedResource Include="CP_SDK\Chat\Resources\index.html"/>
