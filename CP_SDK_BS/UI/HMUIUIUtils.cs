@@ -11,9 +11,23 @@ namespace CP_SDK_BS.UI
     /// </summary>
     public static class HMUIUIUtils
     {
+        private static HMUI.ScreenSystem                m_GameHMUIScreenSystem;
         private static MainFlowCoordinator              m_MainFlowCoordinator;
         private static Canvas                           m_CanvasTemplate;
         private static PhysicsRaycasterWithCache        m_PhysicsRaycaster;
+
+        ////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////
+        
+        public static HMUI.ScreenSystem GameHMUIScreenSystem { get {
+            if (m_GameHMUIScreenSystem)
+                return m_GameHMUIScreenSystem;
+
+            m_GameHMUIScreenSystem = Resources.FindObjectsOfTypeAll<HMUI.ScreenSystem>()
+                .FirstOrDefault((x) => x && x.isActiveAndEnabled && x.GetComponent<HMUI.HierarchyManager>() && x.transform.parent?.name == "UI");
+
+            return m_GameHMUIScreenSystem;
+        } }
 
         ////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////
