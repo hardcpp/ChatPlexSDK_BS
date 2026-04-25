@@ -586,36 +586,28 @@ namespace CP_SDK_BS.Game
                     Scoring.BeatLeader_ManualWarmUpSubmission();
 
                     var l_BeatmapKey = p_Level.GetBeatmapKeys().FirstOrDefault(x => x.beatmapCharacteristic == p_Characteristic && x.difficulty == p_Difficulty);
-  
-                    /// Temp beatleader fix
-                    m_MenuTransitionsHelper._standardLevelScenesTransitionSetupData.Init(
-                        "Solo",
-                        in l_BeatmapKey,
-                        p_Level,
-                        p_OverrideEnvironmentSettings,
-                        p_ColorScheme,
-                        false,/*playerOverrideLightshowColors*/
-                        null,
-                        p_GameplayModifiers ?? new GameplayModifiers(),
-                        p_PlayerSettings ?? new PlayerSpecificSettings(),
-                        null,
-                        m_SimpleLevelStarter._environmentsListModel,
-                        m_MenuTransitionsHelper._audioClipAsyncLoader,
-                        m_MenuTransitionsHelper._beatmapDataLoader,
-                        m_MenuTransitionsHelper._settingsManager,
-                        p_MenuButtonText,
-                        m_MenuTransitionsHelper._beatmapLevelsModel,
-                        m_MenuTransitionsHelper._beatmapLevelsEntitlementModel,
-                        false,
-                        false,
-                        null
+
+                    m_MenuTransitionsHelper.StartStandardLevel(
+                        gameMode:                               "Solo",
+                        beatmapKey:                             in l_BeatmapKey,
+                        beatmapLevel:                           p_Level,
+                        overrideEnvironmentSettings:            p_OverrideEnvironmentSettings,
+                        playerOverrideColorScheme:              p_ColorScheme,
+                        playerOverrideLightshowColors:          false,
+                        beatmapOverrideColorScheme:             null,
+                        gameplayModifiers:                      p_GameplayModifiers ?? new GameplayModifiers(),
+                        playerSpecificSettings:                 p_PlayerSettings ?? new PlayerSpecificSettings(),
+                        practiceSettings:                       null,
+                        environmentsListModel:                  m_SimpleLevelStarter._environmentsListModel,
+                        backButtonText:                         p_MenuButtonText,
+                        useTestNoteCutSoundEffects:             false,
+                        startPaused:                            false,
+                        beforeSceneSwitchToGameplayCallback:    null,
+                        afterSceneSwitchToGameplayCallback:     null,
+                        levelFinishedCallback:                  p_SongFinishedCallback,
+                        levelRestartedCallback:                 null,
+                        recordingToolData:                      null
                     );
-                    m_MenuTransitionsHelper._standardLevelScenesTransitionSetupData.gameplayCoreSceneSetupData.beatmapLevelData = p_BeatmapLevelData;
-                    m_MenuTransitionsHelper._standardLevelFinishedCallback = p_SongFinishedCallback;
-                    m_MenuTransitionsHelper._standardLevelRestartedCallback = null;
-                    m_MenuTransitionsHelper._standardLevelScenesTransitionSetupData.didFinishEvent -= m_MenuTransitionsHelper.HandleMainGameSceneDidFinish;
-                    m_MenuTransitionsHelper._standardLevelScenesTransitionSetupData.didFinishEvent += m_MenuTransitionsHelper.HandleMainGameSceneDidFinish;
-                    m_MenuTransitionsHelper._gameScenesManager.PushScenes(m_MenuTransitionsHelper._standardLevelScenesTransitionSetupData, 0.7f, null, null);
                 }
                 catch (Exception l_Exception)
                 {
