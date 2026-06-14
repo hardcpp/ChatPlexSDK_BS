@@ -7,8 +7,8 @@
         <PluginId>ChatPlexSDK_BS</PluginId>
         <PluginName>ChatPlexSDK_BS</PluginName>
         <Authors>HardCPP</Authors>
-        <Version>6.4.4</Version>
-        <GameVersion>1.42.0</GameVersion>
+        <Version>6.4.5</Version>
+        <GameVersion>1.44.0</GameVersion>
         <Description>.</Description>
         <!--<PluginIcon></PluginIcon>-->
         <!--<ProjectSource></ProjectSource>-->
@@ -18,16 +18,16 @@
 
     <!-- Plugin Dependencies -->
     <ItemGroup>
-        <DependsOn Include="BSIPA" Version="^4.3.0"/>
-        <DependsOn Include="SongCore" Version="^3.15.0"/>
+        <DependsOn Include="BSIPA" Version="^4.3.0" />
+        <DependsOn Include="SongCore" Version="^3.15.0" />
     </ItemGroup>
 
     <!-- Plugin Load Order & Conflicts -->
     <ItemGroup>
-        <LoadAfter Include="BeatSaberMarkupLanguage"/>
-        <ConflictsWith Include="BeatSaberPlusCORE" Version="*"/>
+        <LoadAfter Include="BeatSaberMarkupLanguage" />
+        <ConflictsWith Include="BeatSaberPlusCORE" Version="*" />
     </ItemGroup>
-    
+
     <PropertyGroup>
         <BSMTProjectType>BSIPA</BSMTProjectType>
         <GenerateManifest>true</GenerateManifest>
@@ -38,8 +38,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <OutputCopy Include="$(OutputPath)\$(TargetFileName)" OutputPath="Plugins\$(TargetFileName)"/>
-        <OutputCopy Include="$(OutputPath)\$(TargetName).pdb" OutputPath="Plugins\$(TargetName).pdb"/>
+        <OutputCopy Include="$(OutputPath)\$(TargetFileName)" OutputPath="Plugins\$(TargetFileName)" />
+        <OutputCopy Include="$(OutputPath)\$(TargetName).pdb" OutputPath="Plugins\$(TargetName).pdb" />
     </ItemGroup>
 
 </Project>
