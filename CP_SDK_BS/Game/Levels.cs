@@ -588,9 +588,6 @@ namespace CP_SDK_BS.Game
                     Scoring.BeatLeader_ManualWarmUpSubmission();
 
                     var l_BeatmapKey = level.GetBeatmapKeys().FirstOrDefault(x => x.beatmapCharacteristic == characteristic && x.difficulty == difficulty);
-                    var gameplayAdditionInfo = new GameplayAdditionalInformation(
-                        backButtonText: menuButtonText
-                    );
 
                     m_MenuTransitionsHelper.StartStandardLevel(
                         gameMode:                               "Solo",
@@ -599,6 +596,7 @@ namespace CP_SDK_BS.Game
                         overrideEnvironmentSettings:            overrideEnvironmentSettings,
                         playerOverrideColorScheme:              colorScheme,
                         playerOverrideLightshowColors:          colorOverrideType == ColorSchemesSettings.ColorOverrideType.All ? true : false,
+                        beatmapOverrideColorScheme:             null,
                         gameplayModifiers:                      gameplayModifiers ?? new GameplayModifiers(),
                         playerSpecificSettings:                 playerSettings ?? new PlayerSpecificSettings(),
                         practiceSettings:                       null,
