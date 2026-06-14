@@ -549,28 +549,30 @@ namespace CP_SDK_BS.Game
         /// <summary>
         /// Start a BeatmapLevel
         /// </summary>
-        /// <param name="p_Level">Loaded level</param>
-        /// <param name="p_Characteristic">Beatmap game mode</param>
-        /// <param name="p_Difficulty">Beatmap difficulty</param>
-        /// <param name="p_BeatmapLevelData">Beatmap level data</param>
-        /// <param name="p_OverrideEnvironmentSettings">Environment settings</param>
-        /// <param name="p_ColorScheme">Color scheme</param>
-        /// <param name="p_GameplayModifiers">Modifiers</param>
-        /// <param name="p_PlayerSettings">Player settings</param>
-        /// <param name="p_SongFinishedCallback">Callback when the song is finished</param>
-        /// <param name="p_MenuButtonText">Menu button text</param>
-        public static void StartBeatmapLevel(BeatmapLevel                    p_Level,
-                                             BeatmapCharacteristicSO         p_Characteristic,
-                                             BeatmapDifficulty               p_Difficulty,
-                                             IBeatmapLevelData               p_BeatmapLevelData,
-                                             OverrideEnvironmentSettings     p_OverrideEnvironmentSettings   = null,
-                                             ColorScheme                     p_ColorScheme                   = null,
-                                             GameplayModifiers               p_GameplayModifiers             = null,
-                                             PlayerSpecificSettings          p_PlayerSettings                = null,
-                                             Action<StandardLevelScenesTransitionSetupDataSO, LevelCompletionResults> p_SongFinishedCallback = null,
-                                             string                          p_MenuButtonText                = "Menu")
+        /// <param name="level">Loaded level</param>
+        /// <param name="characteristic">Beatmap game mode</param>
+        /// <param name="difficulty">Beatmap difficulty</param>
+        /// <param name="beatmapLevelData">Beatmap level data</param>
+        /// <param name="overrideEnvironmentSettings">Environment settings</param>
+        /// <param name="colorScheme">Color scheme</param>
+        /// <param name="colorOverrideType">Color scheme override type</param>
+        /// <param name="gameplayModifiers">Modifiers</param>
+        /// <param name="playerSettings">Player settings</param>
+        /// <param name="songFinishedCallback">Callback when the song is finished</param>
+        /// <param name="menuButtonText">Menu button text</param>
+        public static void StartBeatmapLevel(BeatmapLevel                            level,
+                                             BeatmapCharacteristicSO                 characteristic,
+                                             BeatmapDifficulty                       difficulty,
+                                             IBeatmapLevelData                       beatmapLevelData,
+                                             OverrideEnvironmentSettings             overrideEnvironmentSettings                                   = null,
+                                             ColorScheme                             colorScheme                                                   = null,
+                                             ColorSchemesSettings.ColorOverrideType? colorOverrideType                                             = null,
+                                             GameplayModifiers                       gameplayModifiers                                             = null,
+                                             PlayerSpecificSettings                  playerSettings                                                = null,
+                                             Action<StandardLevelScenesTransitionSetupDataSO, LevelCompletionResults> songFinishedCallback = null,
+                                             string                                  menuButtonText                                                = "Menu")
         {
-            if (p_Level == null)
+            if (level == null)
                 return;
 
             if (!m_MenuTransitionsHelper)
@@ -585,26 +587,28 @@ namespace CP_SDK_BS.Game
                 {
                     Scoring.BeatLeader_ManualWarmUpSubmission();
 
-                    var l_BeatmapKey = p_Level.GetBeatmapKeys().FirstOrDefault(x => x.beatmapCharacteristic == p_Characteristic && x.difficulty == p_Difficulty);
+                    var l_BeatmapKey = level.GetBeatmapKeys().FirstOrDefault(x => x.beatmapCharacteristic == characteristic && x.difficulty == difficulty);
+                    var gameplayAdditionInfo = new GameplayAdditionalInformation(
+                        backButtonText: menuButtonText
+                    );
 
                     m_MenuTransitionsHelper.StartStandardLevel(
                         gameMode:                               "Solo",
                         beatmapKey:                             in l_BeatmapKey,
-                        beatmapLevel:                           p_Level,
-                        overrideEnvironmentSettings:            p_OverrideEnvironmentSettings,
-                        playerOverrideColorScheme:              p_ColorScheme,
-                        playerOverrideLightshowColors:          false,
-                        beatmapOverrideColorScheme:             null,
-                        gameplayModifiers:                      p_GameplayModifiers ?? new GameplayModifiers(),
-                        playerSpecificSettings:                 p_PlayerSettings ?? new PlayerSpecificSettings(),
+                        beatmapLevel:                           level,
+                        overrideEnvironmentSettings:            overrideEnvironmentSettings,
+                        playerOverrideColorScheme:              colorScheme,
+                        playerOverrideLightshowColors:          colorOverrideType == ColorSchemesSettings.ColorOverrideType.All ? true : false,
+                        gameplayModifiers:                      gameplayModifiers ?? new GameplayModifiers(),
+                        playerSpecificSettings:                 playerSettings ?? new PlayerSpecificSettings(),
                         practiceSettings:                       null,
                         environmentsListModel:                  m_SimpleLevelStarter._environmentsListModel,
-                        backButtonText:                         p_MenuButtonText,
+                        backButtonText:                         menuButtonText,
                         useTestNoteCutSoundEffects:             false,
                         startPaused:                            false,
                         beforeSceneSwitchToGameplayCallback:    null,
                         afterSceneSwitchToGameplayCallback:     null,
-                        levelFinishedCallback:                  p_SongFinishedCallback,
+                        levelFinishedCallback:                  songFinishedCallback,
                         levelRestartedCallback:                 null,
                         recordingToolData:                      null
                     );
