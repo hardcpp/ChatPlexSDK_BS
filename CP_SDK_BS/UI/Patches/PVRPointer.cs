@@ -5,7 +5,7 @@ using VRUIControls;
 namespace CP_SDK_BS.UI.Patches
 {
     [HarmonyPatch(typeof(VRPointer))]
-    [HarmonyPatch(nameof(VRPointer.ShowLastSelectedPointer), new Type[] { })]
+    [HarmonyPatch(nameof(VRPointer.EnabledLastSelectedPointer), new Type[] { })]
     internal class PVRPointer
     {
         internal static event Action<VRPointer> OnActivated;
