@@ -399,10 +399,7 @@ namespace CP_SDK_BS.Game
         /// <returns>True or false</returns>
         public static bool BeatmapLevel_HasDifficulty(BeatmapLevel p_BeatmapLevel, BeatmapCharacteristicSO p_BeatmapCharacteristicSO, BeatmapDifficulty p_BeatmapDifficulty)
         {
-            if (p_BeatmapLevel == null || p_BeatmapCharacteristicSO == null)
-                return false;
-
-            return p_BeatmapLevel.GetDifficultyBeatmapData(p_BeatmapCharacteristicSO, p_BeatmapDifficulty) != null;
+            return BeatmapLevel_TryGetBeatmapKey(p_BeatmapLevel, p_BeatmapCharacteristicSO, p_BeatmapDifficulty, out var _) == true;
         }
         /// <summary>
         /// Try get a beatmap key from a BeatmapLevel
@@ -587,7 +584,15 @@ namespace CP_SDK_BS.Game
                 {
                     Scoring.BeatLeader_ManualWarmUpSubmission();
 
-                    var l_BeatmapKey = level.GetBeatmapKeys().FirstOrDefault(x => x.beatmapCharacteristic == characteristic && x.difficulty == difficulty);
+                    if (!BeatmapLevel_TryGetBeatmapKey(level, characteristic, difficulty, out var l_BeatmapKey))
+                    {
+                        CP_SDK.ChatPlexSDK.Logger.Error(
+                            $"[CP_SDK_BS.Game][Level.StartBeatmapLevel] Beatmap key not found for '{level.levelID}', "
+                            + $"'{characteristic.serializedName}'/'{difficulty}'"
+                        );
+                        return;
+                    }
+
                     var gameplayAdditionInfo = new GameplayAdditionalInformation(
                         backButtonText: menuButtonText
                     );
